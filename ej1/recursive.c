@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<time.h>
 
-void fibo(int init, int second, int n, int counter, clock_t start);
+void fibo(long long int init, long long int second, int n, int counter, clock_t start);
 
 int main(){
   int n;
@@ -15,12 +15,12 @@ int main(){
   return 0;
 }
 
-void fibo(int init, int second, int n, int counter, clock_t start){
+void fibo(long long int init, long long int second, int n, int counter, clock_t start){
    if(init <= n){
-     clock_t  stop; 
+     clock_t  stop;
      FILE* fp = fopen("recursive.csv", "at");
-     int numero = init + second;
-     printf("%d, ", numero);
+     long long int numero = init + second;
+     printf("%lld, ", numero);
      init = second;
      second = numero;
      stop = clock();
