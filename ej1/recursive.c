@@ -18,7 +18,7 @@ int main(){
 void fibo(long long int init, long long int second, int n, int counter, clock_t start){
    if(init <= n){
      clock_t  stop;
-     FILE* fp = fopen("recursive.csv", "at");
+     FILE* fp = fopen("recursive.csv", "wt");
      long long int numero = init + second;
      printf("%lld, ", numero);
      init = second;

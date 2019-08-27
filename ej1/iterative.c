@@ -4,7 +4,7 @@ int main(){
   clock_t start, stop;
   double time;
   unsigned long t;
-  FILE* fp = fopen("iterative.csv", "at");
+  FILE* fp = fopen("iterative.csv", "wt");
   int counter = 0;
   long long int init = 0, second = 1, num;
   int n = 0;
