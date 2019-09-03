@@ -12,7 +12,7 @@ int main(){
   scanf("%d", &n);
   printf("0, 1, ");
   start = clock();
-  while(init <= n){
+  while(counter <= n){
     num = init + second;
     printf("%lld, ", num);
     init = second;

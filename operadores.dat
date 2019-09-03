@@ -1,0 +1,5 @@
+En C son simbolos que el compiilador define como operaciones matemáticas y/o lógicas.
+Estan clasificados como:
+  * Aritmeticos, relacionales, logicos Bitwise, asignación y MISC.
+
+Bitwise: Operadores que hacen operaciones a nivel de bits.
