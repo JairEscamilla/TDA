@@ -1,24 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void obtenerNumeros(int num, int pos);
+unsigned short int comprimirNumeros(int cantArg, char* Argumentos[]);
 
-int main(int argc, char const *argv[]) {
-  int numero;
-  int nn = 0;
-  for(int i = 1; i < argc; i++){
-    numero = atoi(argv[i]);
-    if(numero >= 0 && numero <= 16){
-      numero <<=4;
-      nn = nn | numero;
-    }
-  }
-  obtenerNumeros(nn, 1);
+int main(int argc, char *argv[]) {
+  //printf("%ld\n", sizeof(unsigned short int));
+  unsigned short int number = 0;
+  number = comprimirNumeros(argc, argv);
+  printf("El numero comprimido es: %d\n", number);
   return 0;
 }
 
-void obtenerNumeros(int num, int pos){
-  num <<= 4*pos;
-  num = num | pos;
-  printf("%d\n", num);
+unsigned short int comprimirNumeros(int cantArg, char* Argumentos[]){
+  unsigned short int number = 0;
+  int cant = 3, aux;
+  for(int i = 1; i < cantArg; i++){
+    aux = atoi(Argumentos[i]);
+    number+= (aux << (cant*4));
+    cant--;
+  }
+  return number;
 }
