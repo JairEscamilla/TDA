@@ -19,13 +19,18 @@ int main(int argc, char *argv[]) {
 unsigned short int comprimirNumeros(int cantArg, char* Argumentos[]){
   unsigned short int number = 0;
   int cant = 3, aux;
+  if(cantArg > 5 )
+    return 0;
   for(int i = 1; i < cantArg; i++){ // Recorriendo el array
     aux = atoi(Argumentos[i]);
-    if (aux >= 0 && aux <= 16) { // Validando los numeros que se han ingresado
+    if (atoi(Argumentos[i]) && aux >= 0 && aux <= 16) { // Validando los numeros que se han ingresado
       number+= (aux << (cant*4));
       cant--;
-    }else
+    }else{
+      printf("Ha ocurrido un error con los argumentos...\nSaliendo del programa...\n");
+      exit(0);
       return 0;
+    }
   }
   return number; // Retornando el numero comprimido
 }
