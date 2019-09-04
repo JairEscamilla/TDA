@@ -1,8 +1,10 @@
-#include <stdio.h>
+#include <stdio.h> // Incluyendo las librerias
 #include <stdlib.h>
 
+// Prototipos de las funciones
 unsigned short int comprimirNumeros(int cantArg, char* Argumentos[]);
 
+// Funcion principal
 int main(int argc, char *argv[]) {
   //printf("%ld\n", sizeof(unsigned short int));
   unsigned short int number = 0;
@@ -11,13 +13,19 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
+// DESARROLLANDO LAS FUNCIONES
+
+// Funcion que comprime los 4 numeros en un solo integer
 unsigned short int comprimirNumeros(int cantArg, char* Argumentos[]){
   unsigned short int number = 0;
   int cant = 3, aux;
-  for(int i = 1; i < cantArg; i++){
+  for(int i = 1; i < cantArg; i++){ // Recorriendo el array
     aux = atoi(Argumentos[i]);
-    number+= (aux << (cant*4));
-    cant--;
+    if (aux >= 0 && aux <= 16) { // Validando los numeros que se han ingresado
+      number+= (aux << (cant*4));
+      cant--;
+    }else
+      return 0;
   }
-  return number;
+  return number; // Retornando el numero comprimido
 }
