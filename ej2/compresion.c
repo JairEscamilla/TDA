@@ -3,8 +3,9 @@
 
 // Prototipos de las funciones
 unsigned short int comprimirNumeros(int cantArg, char* Argumentos[]);
-void menu();
 unsigned short int getNumber(unsigned short int number, int pos);
+void menu();
+void menu2(unsigned short int number);
 // Funcion principal
 int main(int argc, char *argv[]) {
   //printf("%ld\n", sizeof(unsigned short int));
@@ -29,7 +30,7 @@ int main(int argc, char *argv[]) {
           }
         break;
       case 3:
-        printf("aa\n");
+        menu2(number);
         break;
       case 4:
         printf("Saliendo del programa...\n");
@@ -82,4 +83,40 @@ unsigned short int getNumber(unsigned short int number, int pos){
   number <<= (4*pos);
   number >>= 12;
   return number;
+}
+
+// Funcion que despliega el menu dos
+void menu2(unsigned short int number){
+  float resultado = 0;
+  int operacion;
+  printf("\n Operaciones con los numeros\n");
+  printf("1.- Suma.\n");
+  printf("2.- Resta.\n");
+  printf("3.- Multiplicacion.\n");
+  printf("4.- Division.\n");
+  printf("\n\nSeleccionar operacion a realizar-> ");
+  scanf("%d", &operacion);
+  switch (operacion) {
+    case 1:
+      for(int i = 0; i < 4; i++)
+        resultado+= getNumber(number, i);
+      break;
+    case 2:
+      for(int i = 0; i < 4; i++)
+        resultado-= getNumber(number, i);
+      break;
+    case 3:
+      resultado = 1;
+      for(int i = 0; i < 4; i++)
+        resultado*= getNumber(number, i);
+      break;
+    case 4:
+      resultado = 1;
+      for(int i = 0; i < 4; i++)
+        resultado/= getNumber(number, i);
+      break;
+    default:
+      printf("Ingrese una opcion valida!\n");
+  }
+  printf("El resultado es %f\n", resultado);
 }
