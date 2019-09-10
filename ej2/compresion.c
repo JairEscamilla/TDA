@@ -1,3 +1,8 @@
+/*
+ * @author:  Allan Jair Escamilla Hernández
+ * @date:    10/septiembre/2019
+ * @file:    compresion.c
+ */
 #include <stdio.h> // Incluyendo las librerias
 #include <stdlib.h>
 
@@ -48,7 +53,10 @@ int main(int argc, char *argv[]) {
 
 // DESARROLLANDO LAS FUNCIONES
 
-// Funcion que comprime los 4 numeros en un solo integer
+/* * Funcion que comprime los 4 numeros en un solo integer
+   * @param int cantArg recibe la cantidad de argumentos pasados por linea de comandos.
+   * @param char* Argumentos[] recibe los argumentos pasados por linea de comandos.
+*/
 unsigned short int comprimirNumeros(int cantArg, char* Argumentos[]){
   unsigned short int number = 0;
   int cant = 3, aux;
@@ -78,14 +86,19 @@ void menu(){
   printf("Ingresar opcion-> ");
 }
 
-// Funcion que obtiene un numero dentro del numero comprimido
+/* * Funcion que obtiene un numero dentro del numero comprimido.
+   * @param unsigned short int number recibe los 4 numeros comprimidos en uno solo.
+   * @paramint pos recibe la posicion del numero a extraer dentro de los comprimidos.
+*/
 unsigned short int getNumber(unsigned short int number, int pos){
   number <<= (4*pos);
   number >>= 12;
   return number;
 }
 
-// Funcion que despliega el menu dos
+/* * Funcion que despliega el menu dos.
+   * @param unsigned short int number recibe el numero comprimido.
+*/
 void menu2(unsigned short int number){
   float resultado = 0;
   int operacion;
