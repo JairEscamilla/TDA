@@ -27,6 +27,7 @@ typedef struct defLD{
 void anadirNodo(LD** Init, int conexiones, char* etiqueta);
 Nodo** generarArray(int conexiones);
 void agregaraListaD(LD** Init, Nodo* tempo);
+void anadirArista(LD* Init);
 
 int main(){
   Nodo* Inicio = NULL;
@@ -37,10 +38,22 @@ int main(){
   printf("Ingresar la cantidad de conexiones-> ");
   scanf("%d", &conexiones);
   do {
+    system("clear");
     printf("1.- Aniadir nodo.\n");
+    printf("2.- Aniadir arista.\n");
     printf("Ingresar opcion-> ");
     scanf("%d", &opc);
-    anadirNodo(&Init, conexiones, &etiqueta);
+    switch (opc) {
+      case 1:
+        anadirNodo(&Init, conexiones, &etiqueta);
+        break;
+      case 2:
+        anadirArista(Init);
+        break;
+    }
+    printf("Presiona enter para continuar... ");
+    __fpurge(stdin);
+    getchar();
   } while(opc != 0);
   temp = Init;
   while (temp != NULL) {
@@ -54,6 +67,7 @@ int main(){
 void anadirNodo(LD** Init, int conexiones, char* etiqueta){
   Nodo* temp = (Nodo*)malloc(sizeof(Nodo));
   temp->etiqueta = *etiqueta;
+  temp->cantidadConexiones = 0;
   temp->conexiones = generarArray(3);
   for(int i = 0; i < conexiones; i++){
     temp->conexiones[i] = NULL;
@@ -79,4 +93,27 @@ void agregaraListaD(LD** Init, Nodo* tempo){
     }
     temp2->sig = temp;
   }
+}
+
+void anadirArista(LD* Init){
+  LD* temp1 = Init, *temp2 = Init;
+  char c1, c2;
+  __fpurge(stdin);
+  printf("Ingresar nodo al que se quiere agregar la conexion-> ");
+  scanf("%c", &c1);
+  __fpurge(stdin);
+  printf("Ingresar nodo al que se quiere conectar-> ");
+  scanf("%c", &c2);
+  while (temp1->nd->etiqueta != c1 && temp1 != NULL) {
+    temp1 = temp1->sig;
+  }
+  while (temp2->nd->etiqueta != c2 && temp2 != NULL) {
+    temp2 = temp2->sig;
+  }
+  if(temp1 == NULL || temp2 == NULL){
+    printf("No existe alguno de los caracteres ingresados");
+    return;
+  }
+  temp1->nd->conexiones[temp1->nd->cantidadConexiones] = temp2->nd;
+  temp1->nd->cantidadConexiones = temp1->nd->cantidadConexiones + 1;
 }
