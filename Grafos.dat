@@ -1,0 +1,20 @@
+Grafos.
+
+En matemáticas, teoría de gráfos es el estudio de gráficas, las relaciones entre sus vertices, topologías y conexiones.
+Es utilizado en diversas áreas de la ciencia como ciencias de la computacion, biociencias, matemáticas, linguistica, etc.
+
+Los grafos son una representacion grafica de pares de objetows organizados en sets de pares; o duplas, conectados por links.
+Los objetos microconectados se representan por nodos o puntos denominados vertices. Las conexiones entre estas son conocidas como aristas "Edges".
+Formalmente un grafo es un par de sets; (V, E) donde V es el set que contiene los vertices y E contiene las aristas que conectan el par de vertices.
+
+Los grafos son utilizados principalmente para representar secuencias. Dependiendo del grafo, el orden de acceso puede o no tener un orden. Por lo tanto, es muy comun encontrar los
+gráfos acompañados de arreglos conteniendo los accesos permitidos en cierto punto.
+
+Adyacencia.
+Dos nodos o vertices son adyacentes si se encuentran conectados uno de otro por una arista. Es importante notar la direccionalidad del gráfo para definir su adyacencia.
+
+Eg. b -> a, a !=-> b
+
+
+Paths / Caminos recorridos
+Un path representa una secuencia de aristas que conectan varios vertices. Eg. Una secuencia en el ejemplo anterior podria ser ABCD.
