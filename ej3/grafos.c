@@ -48,6 +48,7 @@ int main(){
     switch (opc) {
       case 1:
         anadirNodo(&Init, conexiones, &etiqueta);
+        Inicio = Init->nd;
         break;
       case 2:
         anadirArista(Init, conexiones);
