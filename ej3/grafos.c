@@ -27,7 +27,7 @@ typedef struct defLD{
 void anadirNodo(LD** Init, int conexiones, char* etiqueta);
 Nodo** generarArray(int conexiones);
 void agregaraListaD(LD** Init, Nodo* tempo);
-void anadirArista(LD* Init);
+void anadirArista(LD* Init, int con);
 void limpiarMemoria(LD* Init);
 
 int main(){
@@ -49,7 +49,7 @@ int main(){
         anadirNodo(&Init, conexiones, &etiqueta);
         break;
       case 2:
-        anadirArista(Init);
+        anadirArista(Init, conexiones);
         break;
     }
     printf("Presiona enter para continuar... ");
@@ -97,27 +97,34 @@ void agregaraListaD(LD** Init, Nodo* tempo){
   }
 }
 
-void anadirArista(LD* Init){
+void anadirArista(LD* Init, int con){
   LD* temp1 = Init, *temp2 = Init;
   char c1, c2;
   __fpurge(stdin);
   printf("Ingresar nodo al que se quiere agregar la conexion-> ");
   scanf("%c", &c1);
+  while (temp1 != NULL && temp1->nd->etiqueta != c1) {
+    temp1 = temp1->sig;
+  }
   __fpurge(stdin);
   printf("Ingresar nodo al que se quiere conectar-> ");
   scanf("%c", &c2);
-  while (temp1->nd->etiqueta != c1 && temp1 != NULL) {
-    temp1 = temp1->sig;
-  }
-  while (temp2->nd->etiqueta != c2 && temp2 != NULL) {
+  while (temp2 != NULL && temp2->nd->etiqueta != c2) {
     temp2 = temp2->sig;
   }
   if(temp1 == NULL || temp2 == NULL){
-    printf("No existe alguno de los caracteres ingresados");
+    printf("No existe alguno de los caracteres ingresados\n");
     return;
   }
-  temp1->nd->conexiones[temp1->nd->cantidadConexiones] = temp2->nd;
-  temp1->nd->cantidadConexiones = temp1->nd->cantidadConexiones + 1;
+  if(temp1->nd->cantidadConexiones < con && temp2->nd->cantidadConexiones < con){
+    temp1->nd->conexiones[temp1->nd->cantidadConexiones] = temp2->nd;
+    temp1->nd->cantidadConexiones = temp1->nd->cantidadConexiones + 1;
+    temp2->nd->conexiones[temp2 ->nd->cantidadConexiones] = temp1->nd;
+    temp2->nd->cantidadConexiones = temp2->nd->cantidadConexiones + 1;
+  }else{
+    printf("Alguno de los nodos seleccionados ya no tiene espacio para mas conexiones):\n");
+  }
+
 }
 
 void limpiarMemoria(LD* Init){
