@@ -29,6 +29,7 @@ Nodo** generarArray(int conexiones);
 void agregaraListaD(LD** Init, Nodo* tempo);
 void anadirArista(LD* Init, int con);
 void limpiarMemoria(LD* Init);
+void desplegarGrafo();
 
 int main(){
   Nodo* Inicio = NULL;
@@ -70,7 +71,7 @@ void anadirNodo(LD** Init, int conexiones, char* etiqueta){
   Nodo* temp = (Nodo*)malloc(sizeof(Nodo));
   temp->etiqueta = *etiqueta;
   temp->cantidadConexiones = 0;
-  temp->conexiones = generarArray(3);
+  temp->conexiones = generarArray(conexiones);
   for(int i = 0; i < conexiones; i++){
     temp->conexiones[i] = NULL;
   }
