@@ -28,6 +28,7 @@ void anadirNodo(LD** Init, int conexiones, char* etiqueta);
 Nodo** generarArray(int conexiones);
 void agregaraListaD(LD** Init, Nodo* tempo);
 void anadirArista(LD* Init);
+void limpiarMemoria(LD* Init);
 
 int main(){
   Nodo* Inicio = NULL;
@@ -61,6 +62,7 @@ int main(){
     temp = temp->sig;
   }
   printf("\n");
+  limpiarMemoria(Init);
   return 0;
 }
 
@@ -116,4 +118,14 @@ void anadirArista(LD* Init){
   }
   temp1->nd->conexiones[temp1->nd->cantidadConexiones] = temp2->nd;
   temp1->nd->cantidadConexiones = temp1->nd->cantidadConexiones + 1;
+}
+
+void limpiarMemoria(LD* Init){
+  LD* temp = Init, *temp2;
+  while(temp != NULL){
+    free(temp->nd);
+    temp2 = temp;
+    temp = temp->sig;
+    free(temp2);
+  }
 }
