@@ -21,9 +21,9 @@ typedef struct defNodo{
 void insertarNodo(Nodo** Raiz, char etiqueta, int conexiones);
 void buscarNodo(Nodo *Raiz, int cant, int total, char buscado, Nodo **aux);
 void agregarArista(Nodo *Raiz, int total);
+void buscarDato(Nodo *Raiz, int total);
     // Funcion principal
-    int main()
-{
+int main(){
     Nodo* Raiz = NULL, *Inicial;
     int opcion = 2, conexiones, i = 0;
     char etiqueta = 'a';
@@ -37,7 +37,8 @@ void agregarArista(Nodo *Raiz, int total);
         system("clear");
         printf("1.- Insertar nodo.\n");
         printf("2.- Agregar arista.\n");
-        printf("3.- Salir.\n");
+        printf("3.- Buscar dato.\n");
+        printf("4.- Salir.\n");
         printf("\n\nSeleccione una opcion-> ");
         scanf("%d", &opcion);
         switch (opcion){
@@ -51,6 +52,9 @@ void agregarArista(Nodo *Raiz, int total);
         case 2:
             agregarArista(Raiz, conexiones);
             break;
+        case 3:
+            buscarDato(Raiz, conexiones);
+            break;
         default:
             printf("Ingresa una opcion valida!\n");
             break;
@@ -58,7 +62,7 @@ void agregarArista(Nodo *Raiz, int total);
         printf("\nPresione enter para continuar... ");
         __fpurge(stdin);
         getchar();
-    } while (opcion != 3);
+    } while (opcion != 4);
     
     return 0;
 }
@@ -105,6 +109,23 @@ void buscarNodo(Nodo* Raiz, int cant, int total, char buscado, Nodo** aux){
     }
 }
 
+void buscarDato(Nodo* Raiz, int total){
+    char etiqueta;
+    Nodo* aux = NULL;
+    printf("Ingresar nodo a buscar-> ");
+    __fpurge(stdin);
+    scanf("%c", &etiqueta);
+    buscarNodo(Raiz, 0, total, etiqueta, &aux);
+    if(aux == NULL){
+        printf("No se ha encontrado el dato\n");
+        return;
+    }
+    printf("%c-> ", aux->etiqueta);
+    for(int i = 0; i < total; i++)
+        if(aux->conexiones[i] != NULL)
+            printf("%c-> ", aux->conexiones[i]->etiqueta);
+}
+
 void agregarArista(Nodo* Raiz, int total){
     char etiqueta1, etiqueta2;
     Nodo* agregarArista = NULL, *recibirConexion = NULL;
@@ -126,5 +147,5 @@ void agregarArista(Nodo* Raiz, int total){
     }
     agregarArista->conexiones[agregarArista->cantidadConexiones] = recibirConexion;
     agregarArista->cantidadConexiones = agregarArista->cantidadConexiones + 1;
-
+    printf("Se ha agregado la arista con exito\n");
 }
