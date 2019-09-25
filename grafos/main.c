@@ -22,13 +22,16 @@ void insertarNodo(Nodo** Raiz, char etiqueta, int conexiones);
 void buscarNodo(Nodo *Raiz, int cant, int total, char buscado, Nodo **aux);
 
     // Funcion principal
-    int main()
-{
+    int main(){
     Nodo* Raiz = NULL, *Inicial;
     int opcion = 2, conexiones, i = 0;
     char etiqueta = 'a';
-    printf("Ingresar la cantidad de conexiones por nodo-> ");
-    scanf("%d", &conexiones);
+    do{
+        printf("Ingresar la cantidad de conexiones por nodo-> ");
+        scanf("%d", &conexiones);
+        if (conexiones < 1)
+            printf("Los nodos deben tener al menos una conexion\n");
+    } while (conexiones < 1);
     do{
         system("clear");
         printf("1.- Insertar nodo.\n");
