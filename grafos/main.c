@@ -18,25 +18,26 @@ typedef struct defNodo{
 }Nodo;
 
 // Prototipos de las funciones
-
+void insertarNodo(Nodo** Raiz, char etiqueta, int conexiones);
 
 // Funcion principal
 int main(){
     Nodo* Raiz = NULL;
-    int opcion = 2;
-    do
-    {
+    int opcion = 2, conexiones;
+    char etiqueta = 'a';
+    printf("Ingresar la cantidad de conexiones por nodo-> ");
+    scanf("%d", &conexiones);
+    do{
         system("clear");
         printf("1.- Insertar nodo.\n");
         printf("2.- Salir.\n");
         printf("\n\nSeleccione una opcion-> ");
         scanf("%d", &opcion);
-        switch (opcion)
-        {
+        switch (opcion){
         case 1:
-            printf("Ingresando\n");
+            insertarNodo(&Raiz, etiqueta, conexiones);
+            etiqueta++;
             break;
-        
         default:
             printf("Ingresa una opcion valida!\n");
             break;
@@ -50,3 +51,20 @@ int main(){
 }
 
 // Desarrollando las funciones
+
+void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones){ // Funcion que inserta un nodo al grafo
+    char NodoConnect;
+    Nodo* temp = (Nodo*)malloc(sizeof(Nodo));
+    temp->etiqueta = etiqueta;
+    temp->cantidadConexiones = 0;
+    temp->conexiones = (Nodo**)malloc(sizeof(Nodo*) * conexiones);
+    for(int i = 0; i < conexiones; i++)
+        temp->conexiones[i] = NULL; 
+    if(*Raiz == NULL)
+        *Raiz = temp;
+    else{
+        printf("Ingresar nodo al que desea conectar el nodo creado: ");
+        __fpurge(stdin);
+        scanf("%c", &NodoConnect);
+    }
+}
