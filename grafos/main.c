@@ -20,9 +20,10 @@ typedef struct defNodo{
 // Prototipos de las funciones
 void insertarNodo(Nodo** Raiz, char etiqueta, int conexiones);
 void buscarNodo(Nodo *Raiz, int cant, int total, char buscado, Nodo **aux);
-
+void agregarArista(Nodo *Raiz, int total);
     // Funcion principal
-    int main(){
+    int main()
+{
     Nodo* Raiz = NULL, *Inicial;
     int opcion = 2, conexiones, i = 0;
     char etiqueta = 'a';
@@ -35,7 +36,8 @@ void buscarNodo(Nodo *Raiz, int cant, int total, char buscado, Nodo **aux);
     do{
         system("clear");
         printf("1.- Insertar nodo.\n");
-        printf("2.- Salir.\n");
+        printf("2.- Agregar arista.\n");
+        printf("3.- Salir.\n");
         printf("\n\nSeleccione una opcion-> ");
         scanf("%d", &opcion);
         switch (opcion){
@@ -46,6 +48,9 @@ void buscarNodo(Nodo *Raiz, int cant, int total, char buscado, Nodo **aux);
                 Inicial = Raiz;
             i++;
             break;
+        case 2:
+            agregarArista(Raiz, conexiones);
+            break;
         default:
             printf("Ingresa una opcion valida!\n");
             break;
@@ -53,7 +58,7 @@ void buscarNodo(Nodo *Raiz, int cant, int total, char buscado, Nodo **aux);
         printf("\nPresione enter para continuar... ");
         __fpurge(stdin);
         getchar();
-    } while (opcion != 2);
+    } while (opcion != 3);
     
     return 0;
 }
@@ -98,4 +103,28 @@ void buscarNodo(Nodo* Raiz, int cant, int total, char buscado, Nodo** aux){
         printf("Nodo encontrado\n");
         *aux = Raiz;
     }
+}
+
+void agregarArista(Nodo* Raiz, int total){
+    char etiqueta1, etiqueta2;
+    Nodo* agregarArista = NULL, *recibirConexion = NULL;
+    printf("Ingresar el nodo al que desea agregar la arista-> ");
+    __fpurge(stdin);
+    scanf("%c", &etiqueta1);
+    buscarNodo(Raiz, 0, total, etiqueta1, &agregarArista);  
+    printf("Ingresar el nodo al que se va a conectar el nodo anterior-> ");
+    __fpurge(stdin);
+    scanf("%c", &etiqueta2);
+    buscarNodo(Raiz, 0, total, etiqueta2, &recibirConexion);  
+    if(agregarArista == NULL || recibirConexion == NULL){
+        printf("Alguno de los nodos ingresados no existe\n");
+        return;
+    }
+    if(agregarArista->cantidadConexiones >= total){
+        printf("Este nodo ya no tiene espacio para mas conexiones\n");
+        return;
+    }
+    agregarArista->conexiones[agregarArista->cantidadConexiones] = recibirConexion;
+    agregarArista->cantidadConexiones = agregarArista->cantidadConexiones + 1;
+
 }
