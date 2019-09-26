@@ -82,17 +82,24 @@ void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones){ // Funcion que in
         *Raiz = temp;
     else{
         do{
-            printf("Ingresar nodo al que desea conectar el nodo creado: ");
-            __fpurge(stdin);
-            scanf("%c", &NodoConnect);
+            printf("Ingresar el nodo al que va conectado: ");
+            scanf(" %c", &NodoConnect);
             buscarNodo(*Raiz, 0, conexiones, NodoConnect, &aux);
             if (aux == NULL)
                 printf("El nodo ingresado no existe en el grafo, asegurese de ingresar uno que realmente exista!\n\n");
         } while (aux == NULL);
-        temp->conexiones[temp->cantidadConexiones] = aux;
+        /*temp->conexiones[temp->cantidadConexiones] = aux;
         temp->cantidadConexiones = temp->cantidadConexiones + 1;
-        *Raiz = temp;
-        printf("Se ha insertado correctamente el nodo al grafo!\n\n");
+        *Raiz = temp;*/
+        printf("Aqui\n");
+        if(aux->cantidadConexiones < conexiones){
+            aux->conexiones[aux->cantidadConexiones] = temp;
+            (aux->cantidadConexiones)++;
+            printf("%d\n", aux->cantidadConexiones);
+            printf("Se ha insertado correctamente el nodo al grafo!\n\n");
+        }else{
+            printf("Ya no hay espacio para mas conexiones\n");
+        }
     }
 }
 
