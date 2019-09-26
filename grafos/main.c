@@ -22,6 +22,8 @@ void insertarNodo(Nodo** Raiz, char etiqueta, int conexiones);
 void buscarNodo(Nodo *Raiz, int cant, int total, char buscado, Nodo **aux);
 void agregarArista(Nodo *Raiz, int total);
 void buscarDato(Nodo *Raiz, int total);
+void desplegar_grafo(Nodo* Raiz, int cant, int total);
+void liberar_memoria(Nodo** Raiz, int cant, int total);
     // Funcion principal
 int main(){
     Nodo* Raiz = NULL, *Inicial;
@@ -38,7 +40,8 @@ int main(){
         printf("1.- Insertar nodo.\n");
         printf("2.- Agregar arista.\n");
         printf("3.- Buscar dato.\n");
-        printf("4.- Salir.\n");
+        printf("4.- Desplegar grafo.\n");
+        printf("5.- Salir.\n");
         printf("\n\nSeleccione una opcion-> ");
         scanf("%d", &opcion);
         switch (opcion){
@@ -55,6 +58,13 @@ int main(){
         case 3:
             buscarDato(Raiz, conexiones);
             break;
+        case 4:
+            desplegar_grafo(Raiz, 0, conexiones);
+            break;
+        case 5:
+            printf("Saliendo del programa... \n");
+            liberar_memoria(&Raiz, 0, conexiones);
+            break;
         default:
             printf("Ingresa una opcion valida!\n");
             break;
@@ -62,7 +72,7 @@ int main(){
         printf("\nPresione enter para continuar... ");
         __fpurge(stdin);
         getchar();
-    } while (opcion != 4);
+    } while (opcion != 5);
     
     return 0;
 }
@@ -116,6 +126,20 @@ void buscarNodo(Nodo* Raiz, int cant, int total, char buscado, Nodo** aux){
     }
 }
 
+void desplegar_grafo(Nodo* Raiz, int cant, int total){
+    while (cant < total){
+            if (Raiz->conexiones[cant] != NULL){
+
+                desplegar_grafo(Raiz->conexiones[cant], cant, total);
+                
+            }
+            if(cant == total - 1){
+                printf("%c-> ", Raiz->etiqueta);
+            }
+            cant++;
+    }
+}
+
 void buscarDato(Nodo* Raiz, int total){
     char etiqueta;
     Nodo* aux = NULL;
@@ -155,4 +179,19 @@ void agregarArista(Nodo* Raiz, int total){
     agregarArista->conexiones[agregarArista->cantidadConexiones] = recibirConexion;
     agregarArista->cantidadConexiones = agregarArista->cantidadConexiones + 1;
     printf("Se ha agregado la arista con exito\n");
+}
+
+void liberar_memoria(Nodo** Raiz, int cant, int total){
+    while (cant < total){
+            if ((*Raiz)->conexiones[cant] != NULL){
+
+                liberar_memoria(&((*Raiz)->conexiones[cant]), cant, total);
+                
+            }
+            if(cant == total - 1){
+                free(*Raiz);
+                *Raiz = NULL;
+            }
+            cant++;
+    }
 }
