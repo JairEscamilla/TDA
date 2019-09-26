@@ -188,10 +188,10 @@ void liberar_memoria(Nodo** Raiz, int cant, int total){
                 liberar_memoria(&((*Raiz)->conexiones[cant]), cant, total);
                 
             }
-            if(cant == total - 1){
+           /* if(cant == total - 1){
                 free(*Raiz);
                 *Raiz = NULL;
-            }
+            }*/
             cant++;
     }
 }
