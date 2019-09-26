@@ -98,10 +98,6 @@ void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones){ // Funcion que in
             if (aux == NULL)
                 printf("El nodo ingresado no existe en el grafo, asegurese de ingresar uno que realmente exista!\n\n");
         } while (aux == NULL);
-        /*temp->conexiones[temp->cantidadConexiones] = aux;
-        temp->cantidadConexiones = temp->cantidadConexiones + 1;
-        *Raiz = temp;*/
-        printf("Aqui\n");
         if(aux->cantidadConexiones < conexiones){
             aux->conexiones[aux->cantidadConexiones] = temp;
             (aux->cantidadConexiones)++;
