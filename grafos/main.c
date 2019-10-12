@@ -13,7 +13,7 @@
 // ESTRUCTURA DEL GRAFO
 typedef struct defNodo{
     char etiqueta;
-    int cantidadConexiones;
+    int cantidadConexiones, coincidencias;
     struct defNodo **conexiones;
 }Nodo;
 
@@ -24,8 +24,10 @@ void agregarArista(Nodo *Raiz, int total);
 void buscarDato(Nodo *Raiz, int total);
 void desplegar_grafo(Nodo* Raiz, int cant, int total);
 void liberar_memoria(Nodo** Raiz, int cant, int total);
+void contarCoincidencias(Nodo **Raiz, int cant, int total);
     // Funcion principal
-int main(){
+    int main()
+{
     Nodo* Raiz = NULL, *Inicial;
     int opcion = 2, conexiones, i = 0;
     char etiqueta = 'a';
@@ -62,8 +64,12 @@ int main(){
             desplegar_grafo(Raiz, 0, conexiones);
             break;
         case 5:
+            if(Raiz != NULL){
+                contarCoincidencias(&Raiz, 0, conexiones);
+                liberar_memoria(&Raiz, 0, conexiones);
+            }
             printf("Saliendo del programa... \n");
-            liberar_memoria(&Raiz, 0, conexiones);
+            exit(0);
             break;
         default:
             printf("Ingresa una opcion valida!\n");
@@ -85,6 +91,7 @@ void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones){ // Funcion que in
     Nodo* temp = (Nodo*)malloc(sizeof(Nodo));
     temp->etiqueta = etiqueta;
     temp->cantidadConexiones = 0;
+    temp->coincidencias = 0;
     temp->conexiones = (Nodo**)malloc(sizeof(Nodo*) * conexiones);
     for(int i = 0; i < conexiones; i++)
         temp->conexiones[i] = NULL; 
@@ -184,10 +191,24 @@ void liberar_memoria(Nodo** Raiz, int cant, int total){
                 liberar_memoria(&((*Raiz)->conexiones[cant]), cant, total);
                 
             }
-           /* if(cant == total - 1){
+            if(cant == total - 1)
+                (*Raiz)->coincidencias = (*Raiz)->coincidencias - 1;
+            if((*Raiz)->coincidencias == 0)
                 free(*Raiz);
-                *Raiz = NULL;
-            }*/
+            
             cant++;
+    }
+}
+
+void contarCoincidencias(Nodo **Raiz, int cant, int total){
+    while (cant < total){
+        if ((*Raiz)->conexiones[cant] != NULL){
+
+            liberar_memoria(&((*Raiz)->conexiones[cant]), cant, total);
+        }
+        if (cant == total - 1){
+            (*Raiz)->coincidencias = (*Raiz)->coincidencias + 1;
+        }
+        cant++;
     }
 }
