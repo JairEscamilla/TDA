@@ -7,13 +7,13 @@
  * -> Implementar las funciones de : anadir_nodo, anadir_vertice, desplegar_grafo, buscar_dato.
  * -> Cada nodo será etiquetado por su orden de insercion.
  */
-#include<stdio.h> // Incluyo las bibliotecas
-#include<stdlib.h>
+#include"dijkstra.h" // Incluyo las bibliotecas
 
 // ESTRUCTURA DEL GRAFO
 typedef struct defNodo{
     char etiqueta;
     int cantidadConexiones, coincidencias;
+    int *costo;
     struct defNodo **conexiones;
 }Nodo;
 
@@ -93,6 +93,7 @@ void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones){ // Funcion que in
     temp->cantidadConexiones = 0;
     temp->coincidencias = 0;
     temp->conexiones = (Nodo**)malloc(sizeof(Nodo*) * conexiones);
+    temp->costo = (int*)malloc(sizeof(int)*conexiones);
     for(int i = 0; i < conexiones; i++)
         temp->conexiones[i] = NULL; 
     if(*Raiz == NULL)
@@ -106,6 +107,8 @@ void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones){ // Funcion que in
                 printf("El nodo ingresado no existe en el grafo, asegurese de ingresar uno que realmente exista!\n\n");
         } while (aux == NULL);
         if(aux->cantidadConexiones < conexiones){
+            printf("Ingresar el costo: ");
+            scanf("%d", &(aux->costo[aux->cantidadConexiones]));
             aux->conexiones[aux->cantidadConexiones] = temp;
             (aux->cantidadConexiones)++;
             printf("%d\n", aux->cantidadConexiones);
