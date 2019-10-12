@@ -137,7 +137,7 @@ void desplegar_grafo(Nodo* Raiz, int cant, int total){
                 
             }
             if(cant == total - 1){
-                printf("%c-> ", Raiz->etiqueta);
+                printf("%c, ", Raiz->etiqueta);
             }
             cant++;
     }
