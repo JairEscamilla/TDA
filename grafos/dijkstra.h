@@ -7,3 +7,11 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+
+typedef struct defTabla{
+    int *sdf;
+    char *vertex;
+    char *prevVertex;
+    int counter;
+}Tabla;
+
