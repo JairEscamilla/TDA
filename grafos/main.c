@@ -32,7 +32,6 @@ int main(){
     int opcion = 2, conexiones, i = 0;
     char etiqueta = 'a';
     Tabla t1;
-    printf("%ld\n", sizeof(unsigned int));
     do{
         printf("Ingresar la cantidad de conexiones por nodo-> ");
         scanf("%d", &conexiones);

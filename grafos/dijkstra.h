@@ -22,6 +22,7 @@ void startVisited(Tabla *tabla, int cantiad);
 // Desarrollando las funciones
 void startVisited(Tabla *tabla, int cantidad){
     tabla->visited = 0;
-    for(int i = 0; i < cantidad; i++)
-        (tabla->visited) += (1 << 1);
+    for(int i = 0; i < cantidad; i++){
+        (tabla->visited) += (1 << i);
+    }
 }
