@@ -10,12 +10,6 @@
 #include"dijkstra.h" // Incluyo las bibliotecas
 
 // ESTRUCTURA DEL GRAFO
-typedef struct defNodo{
-    char etiqueta;
-    int cantidadConexiones, coincidencias;
-    int *costo;
-    struct defNodo **conexiones;
-}Nodo;
 
 // Prototipos de las funciones
 void insertarNodo(Nodo** Raiz, char etiqueta, int conexiones);
@@ -29,8 +23,10 @@ void contarCoincidencias(Nodo **Raiz, int cant, int total);
 // Funcion principal
 int main(){
     Nodo* Raiz = NULL, *Inicial;
-    int opcion = 2, conexiones, i = 0;
+    int opcion = 2, conexiones, i = 0, cuentaNodos = 0;
     char etiqueta = 'a';
+    unsigned int visitados = 0;
+    int cuentaPasos = 0;
     Tabla t1;
     do{
         printf("Ingresar la cantidad de conexiones por nodo-> ");
@@ -44,7 +40,8 @@ int main(){
         printf("2.- Agregar arista.\n");
         printf("3.- Buscar dato.\n");
         printf("4.- Desplegar grafo.\n");
-        printf("5.- Salir.\n");
+        printf("5.- Calcular tabla\n");
+        printf("6.- Salir.\n");
         printf("\n\nSeleccione una opcion-> ");
         scanf("%d", &opcion);
         switch (opcion){
@@ -54,6 +51,7 @@ int main(){
             if(i == 0)
                 Inicial = Raiz;
             i++;
+            cuentaNodos++;
             break;
         case 2:
             agregarArista(Raiz, conexiones);
@@ -65,6 +63,10 @@ int main(){
             desplegar_grafo(Raiz, 0, conexiones);
             break;
         case 5:
+            inicializarTabla(&t1, cuentaNodos);
+            Dijkstra(Raiz, &t1, conexiones, 0, visitados, cuentaPasos, Raiz->etiqueta);
+            break;
+        case 6:
             if(Raiz != NULL){
                 contarCoincidencias(&Raiz, 0, conexiones);
                 liberar_memoria(&Raiz, 0, conexiones);
@@ -79,7 +81,7 @@ int main(){
         printf("\nPresione enter para continuar... ");
         __fpurge(stdin);
         getchar();
-    } while (opcion != 5);
+    } while (opcion != 6);
     
     return 0;
 }
