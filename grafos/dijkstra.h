@@ -25,13 +25,14 @@ typedef struct defTabla{
 
 // Estructuras de las funciones
 void startVisited(Tabla *tabla, int cantiad);
-void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigned int visitados, int counter, char previoLabel);
+void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigned int visitados, int counter, char previoLabel, int cuentaNodos);
 int minimoCamino(int* Array, int conexiones);
 void inicializarTabla(Tabla *tabla, int cantidad);
+int buscarPosicion(char *vertex, char etiqueta, int cuentaNodos);
 
-// Desarrollando las funciones
+    // Desarrollando las funciones
 
-// FUNCION QUE INICIALIZA LOS NODOS VISITADOS
+    // FUNCION QUE INICIALIZA LOS NODOS VISITADOS
 void startVisited(Tabla *tabla, int cantidad){
     tabla->visited = 0;
     for(int i = 0; i < cantidad; i++){
@@ -50,11 +51,14 @@ void inicializarTabla(Tabla* tabla, int cantidad){
     }
 }
 
-void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigned int visitados, int counter, char previoLabel){
+void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigned int visitados, int counter, char previoLabel, int cuentaNodos){
     visitados += 1 << (31 - iteracion);
     printf("Visitados: %d\n", visitados);
-    int minimimo = minimoCamino(Inicio->costo, conexiones);
-    
+    int minimo = minimoCamino(Inicio->costo, conexiones);
+    int posicion = buscarPosicion(tabla->vertex, Inicio->etiqueta, cuentaNodos);
+    tabla->sdf[posicion] = counter;
+    tabla->prevVertex[posicion] = previoLabel;
+    Dijkstra(Inicio->conexiones[minimo], tabla, conexiones, iteracion+1, visitados, counter + Inicio->costo[minimo], Inicio->etiqueta, cuentaNodos);
     // printf("EL camino minimo es %c\n", Inicio->conexiones[minimimo]->etiqueta);
 }
 
@@ -64,4 +68,10 @@ int minimoCamino(int* Array, int conexiones){
         if(Array[i] < minimo)
             minimo = Array[i];
     return minimo;
+}
+
+int buscarPosicion(char *vertex, char etiqueta, int cuentaNodos){
+    for(int i = 0; i < cuentaNodos; i++)
+        if(vertex[i] == etiqueta)
+            return i;
 }

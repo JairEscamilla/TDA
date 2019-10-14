@@ -64,7 +64,7 @@ int main(){
             break;
         case 5:
             inicializarTabla(&t1, cuentaNodos);
-            Dijkstra(Raiz, &t1, conexiones, 0, visitados, cuentaPasos, Raiz->etiqueta);
+            Dijkstra(Raiz, &t1, conexiones, 0, visitados, cuentaPasos, Raiz->etiqueta, cuentaNodos);
             break;
         case 6:
             if(Raiz != NULL){
