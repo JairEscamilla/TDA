@@ -25,12 +25,14 @@ void buscarDato(Nodo *Raiz, int total);
 void desplegar_grafo(Nodo* Raiz, int cant, int total);
 void liberar_memoria(Nodo** Raiz, int cant, int total);
 void contarCoincidencias(Nodo **Raiz, int cant, int total);
-    // Funcion principal
-    int main()
-{
+
+// Funcion principal
+int main(){
     Nodo* Raiz = NULL, *Inicial;
     int opcion = 2, conexiones, i = 0;
     char etiqueta = 'a';
+    Tabla t1;
+    printf("%ld\n", sizeof(unsigned int));
     do{
         printf("Ingresar la cantidad de conexiones por nodo-> ");
         scanf("%d", &conexiones);
