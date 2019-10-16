@@ -47,6 +47,7 @@ void inicializarTabla(Tabla* tabla, int cantidad){
     tabla->prevVertex = (char*)malloc(sizeof(char) * cantidad);
     for(int i = 0; i < cantidad; i++){
         tabla->vertex[i] = init;
+        tabla->sdf[i] = 0;
         init++;
     }
 }

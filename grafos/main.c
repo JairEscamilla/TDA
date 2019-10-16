@@ -54,17 +54,29 @@ int main(){
             cuentaNodos++;
             break;
         case 2:
-            agregarArista(Raiz, conexiones);
+            if(Raiz != NULL)
+                agregarArista(Raiz, conexiones);
+            else
+                printf("El grafo esta vacio\n");
             break;
         case 3:
-            buscarDato(Raiz, conexiones);
+            if(Raiz != NULL)
+                buscarDato(Raiz, conexiones);
+            else 
+                printf("El grafo esta vacio\n");
             break;
         case 4:
-            desplegar_grafo(Raiz, 0, conexiones);
+            if(Raiz != NULL)
+                desplegar_grafo(Raiz, 0, conexiones);
+            else 
+                printf("El grafo esta vacio\n");
             break;
         case 5:
-            inicializarTabla(&t1, cuentaNodos);
-            Dijkstra(Raiz, &t1, conexiones, 0, visitados, cuentaPasos, Raiz->etiqueta, cuentaNodos);
+            if(Raiz != NULL){
+                inicializarTabla(&t1, cuentaNodos);
+                Dijkstra(Raiz, &t1, conexiones, 0, visitados, cuentaPasos, Raiz->etiqueta, cuentaNodos);
+            }else 
+                printf("El grafo esta vacio\n");
             break;
         case 6:
             if(Raiz != NULL){
@@ -185,6 +197,8 @@ void agregarArista(Nodo* Raiz, int total){
         printf("Este nodo ya no tiene espacio para mas conexiones\n");
         return;
     }
+    printf("Ingresar costo del salto: ");
+    scanf("%d", &(agregarArista->costo[agregarArista->cantidadConexiones]));
     agregarArista->conexiones[agregarArista->cantidadConexiones] = recibirConexion;
     agregarArista->cantidadConexiones = agregarArista->cantidadConexiones + 1;
     printf("Se ha agregado la arista con exito\n");
