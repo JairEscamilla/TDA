@@ -19,6 +19,7 @@ void buscarDato(Nodo *Raiz, int total);
 void desplegar_grafo(Nodo* Raiz, int cant, int total);
 void liberar_memoria(Nodo** Raiz, int cant, int total);
 void contarCoincidencias(Nodo **Raiz, int cant, int total);
+void deplegarTabla(Tabla tabla, int cuentaNodos);
 
 // Funcion principal
 int main(){
@@ -74,11 +75,15 @@ int main(){
         case 5:
             if(Raiz != NULL){
                 inicializarTabla(&t1, cuentaNodos);
-                Dijkstra(Raiz, &t1, conexiones, 0, visitados, cuentaPasos, Raiz->etiqueta, cuentaNodos);
+                Dijkstra(Raiz, &t1, conexiones, 0, visitados, cuentaPasos, Raiz->etiqueta, cuentaNodos, conexiones);
+                printf("Tabla calculada\n");
             }else 
                 printf("El grafo esta vacio\n");
             break;
         case 6:
+            deplegarTabla(t1, cuentaNodos);
+            break;
+        case 7:
             if(Raiz != NULL){
                 contarCoincidencias(&Raiz, 0, conexiones);
                 liberar_memoria(&Raiz, 0, conexiones);
@@ -93,7 +98,7 @@ int main(){
         printf("\nPresione enter para continuar... ");
         __fpurge(stdin);
         getchar();
-    } while (opcion != 6);
+    } while (opcion != 7);
     
     return 0;
 }
@@ -231,4 +236,18 @@ void contarCoincidencias(Nodo **Raiz, int cant, int total){
         }
         cant++;
     }
+}
+
+void deplegarTabla(Tabla tabla, int cuentaNodos){
+    printf("VERTEX\n");
+    for(int i = 0; i < cuentaNodos; i++)
+        printf("%c, ", tabla.vertex[i]);
+    
+    printf("SDF\n");
+    for (int i = 0; i < cuentaNodos; i++)
+        printf("%d, ", tabla.sdf[i]);
+    
+    printf("PREV VERTEX\n");
+    for (int i = 0; i < cuentaNodos; i++)
+        printf("%c, ", tabla.prevVertex[i]);
 }

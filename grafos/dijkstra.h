@@ -25,7 +25,7 @@ typedef struct defTabla{
 
 // Estructuras de las funciones
 void startVisited(Tabla *tabla, int cantiad);
-void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigned int visitados, int counter, char previoLabel, int cuentaNodos);
+void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigned int visitados, int counter, char previoLabel, int cuentaNodos, int cant);
 int minimoCamino(int* Array, int conexiones);
 void inicializarTabla(Tabla *tabla, int cantidad);
 int buscarPosicion(char *vertex, char etiqueta, int cuentaNodos);
@@ -47,20 +47,36 @@ void inicializarTabla(Tabla* tabla, int cantidad){
     tabla->prevVertex = (char*)malloc(sizeof(char) * cantidad);
     for(int i = 0; i < cantidad; i++){
         tabla->vertex[i] = init;
-        tabla->sdf[i] = 0;
+        tabla->sdf[i] = 100000;
         init++;
     }
 }
 
-void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigned int visitados, int counter, char previoLabel, int cuentaNodos){
-    visitados += 1 << (31 - iteracion);
-    printf("Visitados: %d\n", visitados);
+void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigned int visitados, int counter, char previoLabel, int cuentaNodos, int cant){
+    //visitados += 1 << (31 - iteracion);
+    /*printf("Visitados: %d\n", visitados);
     int minimo = minimoCamino(Inicio->costo, conexiones);
     int posicion = buscarPosicion(tabla->vertex, Inicio->etiqueta, cuentaNodos);
     tabla->sdf[posicion] = counter;
     tabla->prevVertex[posicion] = previoLabel;
-    Dijkstra(Inicio->conexiones[minimo], tabla, conexiones, iteracion+1, visitados, counter + Inicio->costo[minimo], Inicio->etiqueta, cuentaNodos);
+    Dijkstra(Inicio->conexiones[minimo], tabla, conexiones, iteracion+1, visitados, counter + Inicio->costo[minimo], Inicio->etiqueta, cuentaNodos);+*/
     // printf("EL camino minimo es %c\n", Inicio->conexiones[minimimo]->etiqueta);
+    int contador = 0;
+    while (contador < cant){
+        if (Inicio->conexiones[contador] != NULL){
+            //printf("sjjbadjasidindiASDJNSJDNQDNQWOND\n");
+            int posicion = buscarPosicion(tabla->vertex, Inicio->etiqueta, cuentaNodos);
+            printf("%d\n", posicion);
+            if(counter < tabla->sdf[posicion]){
+                //printf("Deberia de entrar aqui xd\n");
+                //system("sleep 5");
+                tabla->sdf[posicion] = counter;
+                tabla->prevVertex[posicion] = previoLabel;
+            }
+            Dijkstra(Inicio->conexiones[contador], tabla, conexiones, iteracion, visitados, counter + Inicio->costo[contador], Inicio->etiqueta, cuentaNodos, cant);
+        }
+        contador++;
+    }
 }
 
 int minimoCamino(int* Array, int conexiones){
