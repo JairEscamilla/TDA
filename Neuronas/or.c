@@ -45,9 +45,9 @@ int main()
 
 void iniciarNeurona(Neurona *n1)
 {
-    n1->bias = -0.4;
-    n1->w[0] = -1.2;
-    n1->w[1] = 1.2;
+    n1->bias = 1.2;
+    n1->w[0] = 1.2;
+    n1->w[1] = 0;
 }
 
 void entrenarNeurona(Neurona *n1, int input_training[4][2], int output_training[])
@@ -55,7 +55,7 @@ void entrenarNeurona(Neurona *n1, int input_training[4][2], int output_training[
     int counter = 0;
     double salida;
     int activacion;
-    double learning_rate = 0.1;
+    double learning_rate = 0.01;
     printf("ENTRENANDO NEURONA\n");
     while (counter < 4)
     {
@@ -72,8 +72,8 @@ void entrenarNeurona(Neurona *n1, int input_training[4][2], int output_training[
             for (int i = 0; i < 2; i++)
             {
                 n1->w[i] = n1->w[i] + learning_rate * output_training[counter] * input_training[counter][i];
+                n1->bias = n1->bias + learning_rate * output_training[counter] * input_training[counter][i];
             }
-                n1->bias = n1->bias + learning_rate * output_training[counter] * input_training[counter][0];
             printf("%f, %f, %f\n", n1->w[0], n1->w[1], n1->bias);
             counter = -1;
         }
