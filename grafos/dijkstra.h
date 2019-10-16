@@ -64,12 +64,9 @@ void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigne
     int contador = 0;
     while (contador < cant){
         if (Inicio->conexiones[contador] != NULL){
-            //printf("sjjbadjasidindiASDJNSJDNQDNQWOND\n");
             int posicion = buscarPosicion(tabla->vertex, Inicio->etiqueta, cuentaNodos);
-            printf("%d\n", posicion);
+            printf("%c - %d - %c\n", Inicio->etiqueta, counter, previoLabel);
             if(counter < tabla->sdf[posicion]){
-                //printf("Deberia de entrar aqui xd\n");
-                //system("sleep 5");
                 tabla->sdf[posicion] = counter;
                 tabla->prevVertex[posicion] = previoLabel;
             }

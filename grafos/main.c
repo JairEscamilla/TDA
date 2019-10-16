@@ -129,6 +129,7 @@ void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones){ // Funcion que in
         if(aux->cantidadConexiones < conexiones){
             printf("Ingresar el costo: ");
             scanf("%d", &(aux->costo[aux->cantidadConexiones]));
+            printf("%d\n", aux->costo[aux->cantidadConexiones]);
             aux->conexiones[aux->cantidadConexiones] = temp;
             (aux->cantidadConexiones)++;
             printf("%d\n", aux->cantidadConexiones);
@@ -204,6 +205,7 @@ void agregarArista(Nodo* Raiz, int total){
     }
     printf("Ingresar costo del salto: ");
     scanf("%d", &(agregarArista->costo[agregarArista->cantidadConexiones]));
+    printf("%d\n", agregarArista->costo[agregarArista->cantidadConexiones]);
     agregarArista->conexiones[agregarArista->cantidadConexiones] = recibirConexion;
     agregarArista->cantidadConexiones = agregarArista->cantidadConexiones + 1;
     printf("Se ha agregado la arista con exito\n");
