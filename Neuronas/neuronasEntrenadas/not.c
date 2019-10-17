@@ -24,6 +24,7 @@ int main()
     int output_training[] = {1, -1};
     iniciarNeurona(&n1);
     entrenarNeurona(&n1, input_training, output_training);
+    printf("Pesos: %f, %f, %f\n", n1.w[0], n1.w[1], n1.bias);
     do
     {
         printf("\n");
