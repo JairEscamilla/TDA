@@ -63,13 +63,13 @@ void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigne
     // printf("EL camino minimo es %c\n", Inicio->conexiones[minimimo]->etiqueta);
     int contador = 0;
     while (contador < cant){
+        int posicion = buscarPosicion(tabla->vertex, Inicio->etiqueta, cuentaNodos);
+        if (counter < tabla->sdf[posicion]){
+            tabla->sdf[posicion] = counter;
+            tabla->prevVertex[posicion] = previoLabel;
+        }
         if (Inicio->conexiones[contador] != NULL){
-            int posicion = buscarPosicion(tabla->vertex, Inicio->etiqueta, cuentaNodos);
-            printf("%c - %d - %c\n", Inicio->etiqueta, counter, previoLabel);
-            if(counter < tabla->sdf[posicion]){
-                tabla->sdf[posicion] = counter;
-                tabla->prevVertex[posicion] = previoLabel;
-            }
+            // printf("%c - %d - %c\n", Inicio->etiqueta, counter, previoLabel);
             Dijkstra(Inicio->conexiones[contador], tabla, conexiones, iteracion, visitados, counter + Inicio->costo[contador], Inicio->etiqueta, cuentaNodos, cant);
         }
         contador++;
