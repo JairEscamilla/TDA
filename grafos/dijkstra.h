@@ -92,13 +92,15 @@ int buscarPosicion(char *vertex, char etiqueta, int cuentaNodos){
 
 void calcular_ruta(Tabla t1, int cantidad){
     char nodo, etiqueta;
-    int p = 0;
+    int p = 0, min = 0;
     printf("Ingresar al nodo de la red al que desea llegar-> ");
     __fpurge(stdin);
     scanf("%c", &nodo);
     for(int i = 0; i < cantidad; i++)
-        if(t1.vertex[i] == nodo)
+        if(t1.vertex[i] == nodo){
             p = 1;
+            min = t1.sdf[i];
+        }
     if(p == 0){
         printf("El nodo no se encuentra en la red):\n");
         return;
@@ -113,4 +115,5 @@ void calcular_ruta(Tabla t1, int cantidad){
             }
         printf("%c <- ", etiqueta);
     }
+    printf("\nEl costo total de este camino es de %d\n", min);
 }

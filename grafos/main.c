@@ -251,15 +251,15 @@ void contarCoincidencias(Nodo **Raiz, int cant, int total){
 }
 
 void deplegarTabla(Tabla tabla, int cuentaNodos){
-    printf("VERTEX\n");
+    printf("VERTEX: ");
     for(int i = 0; i < cuentaNodos; i++)
         printf("%c, ", tabla.vertex[i]);
     
-    printf("SDF\n");
+    printf("\nSDF: ");
     for (int i = 0; i < cuentaNodos; i++)
         printf("%d, ", tabla.sdf[i]);
     
-    printf("PREV VERTEX\n");
+    printf("\nPREV VERTEX: ");
     for (int i = 0; i < cuentaNodos; i++)
         printf("%c, ", tabla.prevVertex[i]);
 }
