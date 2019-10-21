@@ -69,7 +69,6 @@ void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigne
             tabla->prevVertex[posicion] = previoLabel;
         }
         if (Inicio->conexiones[contador] != NULL){
-            // printf("%c - %d - %c\n", Inicio->etiqueta, counter, previoLabel);
             Dijkstra(Inicio->conexiones[contador], tabla, conexiones, iteracion, visitados, counter + Inicio->costo[contador], Inicio->etiqueta, cuentaNodos, cant);
         }
         contador++;
