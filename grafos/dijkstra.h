@@ -29,7 +29,7 @@ void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigne
 int minimoCamino(int* Array, int conexiones);
 void inicializarTabla(Tabla *tabla, int cantidad);
 int buscarPosicion(char *vertex, char etiqueta, int cuentaNodos);
-void calcular_ruta();
+void calcular_ruta(Tabla t1, int cantidad);
 
     // Desarrollando las funciones
 
@@ -90,9 +90,27 @@ int buscarPosicion(char *vertex, char etiqueta, int cuentaNodos){
             return i;
 }
 
-void calcular_ruta(){
-    char nodo;
+void calcular_ruta(Tabla t1, int cantidad){
+    char nodo, etiqueta;
+    int p = 0;
     printf("Ingresar al nodo de la red al que desea llegar-> ");
     __fpurge(stdin);
     scanf("%c", &nodo);
+    for(int i = 0; i < cantidad; i++)
+        if(t1.vertex[i] == nodo)
+            p = 1;
+    if(p == 0){
+        printf("El nodo no se encuentra en la red):\n");
+        return;
+    }
+    etiqueta = nodo;
+    printf("%c <- ", etiqueta);
+    while (etiqueta != 'a'){
+        for(int i = 0; i < cantidad; i++)
+            if(t1.vertex[i] == etiqueta){
+                etiqueta = t1.prevVertex[i];
+                break;
+            }
+        printf("%c <- ", etiqueta);
+    }
 }

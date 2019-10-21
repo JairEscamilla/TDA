@@ -89,7 +89,7 @@ int main(){
             break;
         case 7:
             if(bandera == 1){
-                calcular_ruta();
+                calcular_ruta(t1, cuentaNodos);
             }else 
                 printf("Aun no se ha calculado la tabla\n");
             break;
