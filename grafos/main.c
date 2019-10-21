@@ -28,6 +28,7 @@ int main(){
     char etiqueta = 'a';
     unsigned int visitados = 0;
     int cuentaPasos = 0;
+    int bandera = 0;
     Tabla t1;
     do{
         printf("Ingresar la cantidad de conexiones por nodo-> ");
@@ -42,7 +43,9 @@ int main(){
         printf("3.- Buscar dato.\n");
         printf("4.- Desplegar grafo.\n");
         printf("5.- Calcular tabla\n");
-        printf("6.- Salir.\n");
+        printf("6.- Desplegar tabla.\n");
+        printf("7.- Calcular ruta más corta.\n");
+        printf("8.- Salir.\n");
         printf("\n\nSeleccione una opcion-> ");
         scanf("%d", &opcion);
         switch (opcion){
@@ -79,11 +82,18 @@ int main(){
                 printf("Tabla calculada\n");
             }else 
                 printf("El grafo esta vacio\n");
+            bandera = 1;
             break;
         case 6:
             deplegarTabla(t1, cuentaNodos);
             break;
         case 7:
+            if(bandera == 1){
+                calcular_ruta();
+            }else 
+                printf("Aun no se ha calculado la tabla\n");
+            break;
+        case 8:
             if(Raiz != NULL){
                 contarCoincidencias(&Raiz, 0, conexiones);
                 liberar_memoria(&Raiz, 0, conexiones);
@@ -98,7 +108,7 @@ int main(){
         printf("\nPresione enter para continuar... ");
         __fpurge(stdin);
         getchar();
-    } while (opcion != 7);
+    } while (opcion != 8);
     
     return 0;
 }
