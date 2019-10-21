@@ -105,6 +105,7 @@ void calcular_ruta(Tabla t1, int cantidad){
         printf("El nodo no se encuentra en la red):\n");
         return;
     }
+    printf("La ruta mas corta es: ");
     etiqueta = nodo;
     printf("%c <- ", etiqueta);
     while (etiqueta != 'a'){
