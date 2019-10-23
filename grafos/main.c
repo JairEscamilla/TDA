@@ -20,6 +20,7 @@ void desplegar_grafo(Nodo* Raiz, int cant, int total);
 void liberar_memoria(Nodo** Raiz, int cant, int total);
 void contarCoincidencias(Nodo **Raiz, int cant, int total);
 void deplegarTabla(Tabla tabla, int cuentaNodos);
+void menu();
 
 // Funcion principal
 int main(){
@@ -37,16 +38,7 @@ int main(){
             printf("Los nodos deben tener al menos una conexion\n");
     } while (conexiones < 1);
     do{
-        system("clear");
-        printf("1.- Insertar nodo.\n");
-        printf("2.- Agregar arista.\n");
-        printf("3.- Buscar dato.\n");
-        printf("4.- Desplegar grafo.\n");
-        printf("5.- Calcular tabla\n");
-        printf("6.- Desplegar tabla.\n");
-        printf("7.- Calcular ruta más corta.\n");
-        printf("8.- Salir.\n");
-        printf("\n\nSeleccione una opcion-> ");
+        menu();
         scanf("%d", &opcion);
         switch (opcion){
         case 1:
@@ -115,7 +107,27 @@ int main(){
 
 // Desarrollando las funciones
 
-void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones){ // Funcion que inserta un nodo al grafo
+/* * Funcion que imprime el menu
+*/
+void menu(){
+    system("clear");
+    printf("1.- Insertar nodo.\n");
+    printf("2.- Agregar arista.\n");
+    printf("3.- Buscar dato.\n");
+    printf("4.- Desplegar grafo.\n");
+    printf("5.- Calcular tabla\n");
+    printf("6.- Desplegar tabla.\n");
+    printf("7.- Calcular ruta más corta.\n");
+    printf("8.- Salir.\n");
+    printf("\n\nSeleccione una opcion-> ");
+}
+
+/* * Funcion que inserta un nodo al grafo.
+   * @param Nodo** Raiz recibe la direccion de memoria del nodo raiz del grafo.
+   * @param char etiqueta recibe un valor que contendrá la etiqueta del nodo a insertar.
+   * @param int conexiones recibe la cantidad de conexiones por nodo.
+*/
+void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones){
     char NodoConnect;
     Nodo* aux = NULL;
     Nodo* temp = (Nodo*)malloc(sizeof(Nodo));
@@ -150,6 +162,13 @@ void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones){ // Funcion que in
     }
 }
 
+/* * Funcion que busca un nodo dado por el usario
+   * @param Nodo* Raiz recibe la direccion de memoria del nodo raiz del grafo.
+   * @param int cant recibe una variable que contara las veces que se acceda a cada conexion de un nodo.
+   * @param int total recibe el total de conexiones por nodo.
+   * @param char buscado recibe la etiqueta del nodo a buscar.
+   * @param Nodo** aux recibe la direccion de memoria de un apuntador que almacenará el nodo buscado.
+*/
 void buscarNodo(Nodo* Raiz, int cant, int total, char buscado, Nodo** aux){
     if (Raiz->etiqueta != buscado){
         while (cant < total){
@@ -163,6 +182,11 @@ void buscarNodo(Nodo* Raiz, int cant, int total, char buscado, Nodo** aux){
     }
 }
 
+/* * Funcion que despliega los nodos del grafo.
+   * @param Nodo* Raiz recibe la direccion de memoria del nodo raiz del grafo.
+   * @param int cant recibe una variable que contara las veces que se acceda a cada conexion de un nodo.
+   * @param int total recibe el total de conexiones por nodo.
+*/
 void desplegar_grafo(Nodo* Raiz, int cant, int total){
     while (cant < total){
             if (Raiz->conexiones[cant] != NULL){
@@ -177,6 +201,10 @@ void desplegar_grafo(Nodo* Raiz, int cant, int total){
     }
 }
 
+/* * Funcion que busca un dato en el grafo.
+   * @param Nodo* Raiz recibe la direccion de memoria del nodo raiz del grafo.
+   * @param int total recibe el total de conexiones por nodo.
+*/
 void buscarDato(Nodo* Raiz, int total){
     char etiqueta;
     Nodo* aux = NULL;
@@ -194,6 +222,10 @@ void buscarDato(Nodo* Raiz, int total){
             printf("%c-> ", aux->conexiones[i]->etiqueta);
 }
 
+/* * Funcion que agrega una arista al grafo.
+   * @param Nodo* Raiz recibe la direccion de memoria del nodo raiz del grafo.
+   * @param int total recibe el total de conexiones por nodo.
+*/
 void agregarArista(Nodo* Raiz, int total){
     char etiqueta1, etiqueta2;
     Nodo* agregarArista = NULL, *recibirConexion = NULL;
@@ -221,6 +253,12 @@ void agregarArista(Nodo* Raiz, int total){
     printf("Se ha agregado la arista con exito\n");
 }
 
+
+/* * Funcion que libera la memoria del grafo.
+   * @param Nodo** Raiz recibe la direccion de memoria del nodo raiz del grafo.
+   * @param int cant recibe una variable que contara las veces que se acceda a cada conexion de un nodo.
+   * @param int total recibe el total de conexiones por nodo.
+*/
 void liberar_memoria(Nodo** Raiz, int cant, int total){
     while (cant < total){
             if ((*Raiz)->conexiones[cant] != NULL){
@@ -237,10 +275,14 @@ void liberar_memoria(Nodo** Raiz, int cant, int total){
     }
 }
 
-void contarCoincidencias(Nodo **Raiz, int cant, int total){
+/* * Funcion que cuenta las veces en las que se puede llegar a un mismo nodo.
+   * @param Nodo** Raiz recibe la direccion de memoria del nodo raiz del grafo.
+   * @param int cant recibe una variable que contara las veces que se acceda a cada conexion de un nodo.
+   * @param int total recibe el total de conexiones por nodo.
+*/
+void contarCoincidencias(Nodo** Raiz, int cant, int total){
     while (cant < total){
         if ((*Raiz)->conexiones[cant] != NULL){
-
             liberar_memoria(&((*Raiz)->conexiones[cant]), cant, total);
         }
         if (cant == total - 1){
@@ -250,6 +292,10 @@ void contarCoincidencias(Nodo **Raiz, int cant, int total){
     }
 }
 
+/* * Funcion que despliega la tabla de calculada por el algoritmo de Dijkstra.
+   * @param Tabla tabla recibe la tabla donde se calcularon los caminos mas cortos.
+   * @param int cuentaNodos recibe la cantidad de nodos en el grafo.
+*/
 void deplegarTabla(Tabla tabla, int cuentaNodos){
     printf("VERTEX: ");
     for(int i = 0; i < cuentaNodos; i++)

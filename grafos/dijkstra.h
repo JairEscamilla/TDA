@@ -54,14 +54,6 @@ void inicializarTabla(Tabla* tabla, int cantidad){
 }
 
 void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigned int visitados, int counter, char previoLabel, int cuentaNodos, int cant){
-    //visitados += 1 << (31 - iteracion);
-    /*printf("Visitados: %d\n", visitados);
-    int minimo = minimoCamino(Inicio->costo, conexiones);
-    int posicion = buscarPosicion(tabla->vertex, Inicio->etiqueta, cuentaNodos);
-    tabla->sdf[posicion] = counter;
-    tabla->prevVertex[posicion] = previoLabel;
-    Dijkstra(Inicio->conexiones[minimo], tabla, conexiones, iteracion+1, visitados, counter + Inicio->costo[minimo], Inicio->etiqueta, cuentaNodos);+*/
-    // printf("EL camino minimo es %c\n", Inicio->conexiones[minimimo]->etiqueta);
     int contador = 0;
     while (contador < cant){
         int posicion = buscarPosicion(tabla->vertex, Inicio->etiqueta, cuentaNodos);
