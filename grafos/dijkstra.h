@@ -24,20 +24,21 @@ typedef struct defTabla{
 }Tabla;
 
 // Estructuras de las funciones
-void startVisited(Tabla *tabla, int cantiad);
+void startVisited(unsigned int* visited, int cantiad);
 void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigned int visitados, int counter, char previoLabel, int cuentaNodos, int cant);
 int minimoCamino(int* Array, int conexiones);
 void inicializarTabla(Tabla *tabla, int cantidad);
 int buscarPosicion(char *vertex, char etiqueta, int cuentaNodos);
 void calcular_ruta(Tabla t1, int cantidad);
+unsigned int getNumber(unsigned int number, int pos);
 
     // Desarrollando las funciones
 
     // FUNCION QUE INICIALIZA LOS NODOS VISITADOS
-void startVisited(Tabla *tabla, int cantidad){
-    tabla->visited = 0;
+void startVisited(unsigned int* visited, int cantidad){
+    visited = 0;
     for(int i = 0; i < cantidad; i++){
-        (tabla->visited) += (1 << i);
+        (visited) += (1 << i);
     }
 }
 
@@ -55,15 +56,42 @@ void inicializarTabla(Tabla* tabla, int cantidad){
 
 void Dijkstra(Nodo *Inicio, Tabla *tabla, int conexiones, int iteracion, unsigned int visitados, int counter, char previoLabel, int cuentaNodos, int cant){
     int contador = 0;
+    unsigned int visited = 0, temp = 0, temp2;
+    int bits = sizeof(unsigned int) * 8 - cuentaNodos;
+    printf("%d\n", bits);
     while (contador < cant){
-        int posicion = buscarPosicion(tabla->vertex, Inicio->etiqueta, cuentaNodos);
-        if (counter < tabla->sdf[posicion]){
-            tabla->sdf[posicion] = counter;
-            tabla->prevVertex[posicion] = previoLabel;
-        }
-        if (Inicio->conexiones[contador] != NULL){
-            Dijkstra(Inicio->conexiones[contador], tabla, conexiones, iteracion, visitados, counter + Inicio->costo[contador], Inicio->etiqueta, cuentaNodos, cant);
-        }
+            int posicion = buscarPosicion(tabla->vertex, Inicio->etiqueta, cuentaNodos);
+            temp2 = visited;
+            temp = 1;
+            temp <<= bits + posicion;
+            visited |= temp;
+            if(visited == temp2)
+            {
+                printf ("Omitimos un nodo\n");
+                //Estaba prendido       
+            }
+            else
+            {
+                //Estaba apagado
+                printf("Visitados: %u\n", visited);
+                if (counter < tabla->sdf[posicion]){
+                    tabla->sdf[posicion] = counter;
+                    tabla->prevVertex[posicion] = previoLabel;
+                }
+                if (Inicio->conexiones[contador] != NULL){
+                    Dijkstra(Inicio->conexiones[contador], tabla, conexiones, iteracion, visitados, counter + Inicio->costo[contador], Inicio->etiqueta, cuentaNodos, cant);
+                    visited = temp2;
+                }
+            }
+            /*printf("Visitados: %u\n", visited);
+            if (counter < tabla->sdf[posicion]){
+                tabla->sdf[posicion] = counter;
+                tabla->prevVertex[posicion] = previoLabel;
+            }
+            if (Inicio->conexiones[contador] != NULL){
+                Dijkstra(Inicio->conexiones[contador], tabla, conexiones, iteracion, visitados, counter + Inicio->costo[contador], Inicio->etiqueta, cuentaNodos, cant);
+            }*/
+        
         contador++;
     }
 }
@@ -109,4 +137,9 @@ void calcular_ruta(Tabla t1, int cantidad){
         printf("%c <- ", etiqueta);
     }
     printf("\nEl costo total de este camino es de %d\n", min);
+}
+unsigned int getNumber(unsigned int number, int pos){
+  number <<= (pos);
+  number >>= 12;
+  return number;
 }

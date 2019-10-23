@@ -73,7 +73,7 @@ int main(){
 }   
 
 // DESARROLLANDO LAS FUNCIONES
-
+        
 /* * Funcion que hace la sumatoria de los pesos y las entradas de la neurona
    * @param int x[] recibe un arreglo de las entradas dadas por el usuario.
    * @param Neurona n recibe la neurona que contiene los pesos y el valor del sesgo para realizar la sumatoria.

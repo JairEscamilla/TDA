@@ -283,7 +283,7 @@ void liberar_memoria(Nodo** Raiz, int cant, int total){
 void contarCoincidencias(Nodo** Raiz, int cant, int total){
     while (cant < total){
         if ((*Raiz)->conexiones[cant] != NULL){
-            liberar_memoria(&((*Raiz)->conexiones[cant]), cant, total);
+            contarCoincidencias(&((*Raiz)->conexiones[cant]), cant, total);
         }
         if (cant == total - 1){
             (*Raiz)->coincidencias = (*Raiz)->coincidencias + 1;
