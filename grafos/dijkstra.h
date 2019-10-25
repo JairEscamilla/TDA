@@ -60,7 +60,6 @@ void Dijkstra(Nodo *Inicio, Tabla *tabla, int counter, char previoLabel, int cue
     int contador = 0;
     unsigned int temp = 0, temp2;
     int bits = sizeof(unsigned int) * 8 - cuentaNodos;
-    printf("%d\n", bits);
     while (contador < cant){
             int posicion = buscarPosicion(tabla->vertex, Inicio->etiqueta, cuentaNodos);
             temp2 = visited;
@@ -68,7 +67,6 @@ void Dijkstra(Nodo *Inicio, Tabla *tabla, int counter, char previoLabel, int cue
             temp <<= bits + posicion;
             visited |= temp;
             if(visited != temp2){
-                printf("Visitados: %u\n", visited);
                 if (counter < tabla->sdf[posicion]){
                     tabla->sdf[posicion] = counter;
                     tabla->prevVertex[posicion] = previoLabel;
@@ -99,7 +97,7 @@ int buscarPosicion(char *vertex, char etiqueta, int cuentaNodos){
 void calcular_ruta(Tabla t1, int cantidad){
     char nodo, etiqueta;
     int p = 0, min = 0;
-    printf("Ingresar al nodo de la red al que desea llegar-> ");
+    printf("Ingresar el nodo de la red al que desea llegar-> ");
     __fpurge(stdin);
     scanf("%c", &nodo);
     for(int i = 0; i < cantidad; i++)

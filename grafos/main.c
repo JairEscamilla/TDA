@@ -44,10 +44,9 @@ int main(){
         case 1:
             insertarNodo(&Raiz, etiqueta, conexiones, i);
             etiqueta++;
-            if(i == 0)
-                Inicial = Raiz;
             i++;
             cuentaNodos++;
+            printf("Se ha insertado correctamente el nodo al grafo!\n\n");
             break;
         case 2:
             if(Raiz != NULL)
@@ -167,7 +166,6 @@ void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones, int i){
                     temp2 = temp2->next;
                 temp2->next = temp;
             }
-            printf("Se ha insertado correctamente el nodo al grafo!\n\n");
         }else{
             printf("Ya no hay espacio para mas conexiones\n");
         }
