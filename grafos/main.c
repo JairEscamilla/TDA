@@ -70,7 +70,7 @@ int main(){
         case 5:
             if(Raiz != NULL){
                 inicializarTabla(&t1, cuentaNodos);
-                Dijkstra(Raiz, &t1, conexiones, 0, visitados, cuentaPasos, Raiz->etiqueta, cuentaNodos, conexiones);
+                Dijkstra(Raiz, &t1, cuentaPasos, Raiz->etiqueta, cuentaNodos, conexiones);
                 printf("Tabla calculada\n");
             }else 
                 printf("El grafo esta vacio\n");
