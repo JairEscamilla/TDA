@@ -1,5 +1,5 @@
 /*
- * @author:  Allan Jair Escamilla Hernández
+ * @author:  Allan Jair Escamilla Hernández, Raul Gonzalez Portillo y Cesar Mauricio Arellano Velasquez
  * @date:    12/octubre/2019
  * @file:    dijkstra.c
  * @brief:  Implementacion del algortmo Dijkstra a un grafo.

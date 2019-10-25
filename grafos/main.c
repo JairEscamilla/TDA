@@ -1,5 +1,5 @@
 /*
- * @author:  Allan Jair Escamilla Hernández
+ * @author:  Allan Jair Escamilla Hernández, Raul Gonzalez Portillo y Cesar Mauricio Arellano Velasquez
  * @date:    17/septiembre/2019
  * @file:    grafos.c
  * @brief:  Implementacion de un generador de grafos.
