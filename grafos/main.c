@@ -156,10 +156,11 @@ void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones, int i){
         if(aux->cantidadConexiones < conexiones){
             printf("Ingresar el costo: ");
             scanf("%d", &(aux->costo[aux->cantidadConexiones]));
-            printf("%d\n", aux->costo[aux->cantidadConexiones]);
+            temp->costo[temp->cantidadConexiones] = aux->costo[aux->cantidadConexiones];
             aux->conexiones[aux->cantidadConexiones] = temp;
+            temp->conexiones[temp->cantidadConexiones] = aux;
             (aux->cantidadConexiones)++;
-            printf("%d\n", aux->cantidadConexiones);
+            (temp->cantidadConexiones)++;
             if(i != 0){
                 temp2 = *Raiz;
                 while(temp2->next != NULL)
@@ -231,15 +232,17 @@ void agregarArista(Nodo* Raiz, int total){
         printf("Alguno de los nodos ingresados no existe\n");
         return;
     }
-    if(agregarArista->cantidadConexiones >= total){
-        printf("Este nodo ya no tiene espacio para mas conexiones\n");
+    if(agregarArista->cantidadConexiones >= total || recibirConexion->cantidadConexiones >= total){
+        printf("Alguno de los nodos ya no tiene espacio para mas conexiones\n");
         return;
     }
     printf("Ingresar costo del salto: ");
     scanf("%d", &(agregarArista->costo[agregarArista->cantidadConexiones]));
-    printf("%d\n", agregarArista->costo[agregarArista->cantidadConexiones]);
+    recibirConexion->costo[recibirConexion->cantidadConexiones] = agregarArista->costo[agregarArista->cantidadConexiones];
     agregarArista->conexiones[agregarArista->cantidadConexiones] = recibirConexion;
+    recibirConexion->conexiones[recibirConexion->cantidadConexiones] = agregarArista;
     agregarArista->cantidadConexiones = agregarArista->cantidadConexiones + 1;
+    recibirConexion->cantidadConexiones = recibirConexion->cantidadConexiones + 1;
     printf("Se ha agregado la arista con exito\n");
 }
 
