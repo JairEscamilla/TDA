@@ -24,7 +24,7 @@ typedef struct defTabla{
 }Tabla;
 
 // Estructuras de las funciones
-void Dijkstra(Nodo *Inicio, Tabla *tabla, int counter, char previoLabel, int cuentaNodos, int cant);
+void Dijkstra(Nodo *Inicio, Tabla *tabla, int counter, char previoLabel, int cuentaNodos, int cant, unsigned int visited);
 void inicializarTabla(Tabla *tabla, int cantidad);
 int buscarPosicion(char *vertex, char etiqueta, int cuentaNodos);
 void calcular_ruta(Tabla t1, int cantidad);
@@ -55,9 +55,9 @@ void inicializarTabla(Tabla* tabla, int cantidad){
    * @param int cuentaNodos recibe la cantidad de nodos en el grafo.
    * @param int cant es la cantidad de conexiones que tiene cada nodo.
 */
-void Dijkstra(Nodo *Inicio, Tabla *tabla, int counter, char previoLabel, int cuentaNodos, int cant){
+void Dijkstra(Nodo *Inicio, Tabla *tabla, int counter, char previoLabel, int cuentaNodos, int cant, unsigned int visited){
     int contador = 0;
-    unsigned int visited = 0, temp = 0, temp2;
+    unsigned int temp = 0, temp2;
     int bits = sizeof(unsigned int) * 8 - cuentaNodos;
     printf("%d\n", bits);
     while (contador < cant){
@@ -66,14 +66,16 @@ void Dijkstra(Nodo *Inicio, Tabla *tabla, int counter, char previoLabel, int cue
             temp = 1;
             temp <<= bits + posicion;
             visited |= temp;
-            if(!(visited == temp2)){
+            if(visited == temp2){
+                printf("asda\n");
+            }else{
                 printf("Visitados: %u\n", visited);
                 if (counter < tabla->sdf[posicion]){
                     tabla->sdf[posicion] = counter;
                     tabla->prevVertex[posicion] = previoLabel;
                 }
                 if (Inicio->conexiones[contador] != NULL){
-                    Dijkstra(Inicio->conexiones[contador], tabla, counter + Inicio->costo[contador], Inicio->etiqueta, cuentaNodos, cant);
+                    Dijkstra(Inicio->conexiones[contador], tabla, counter + Inicio->costo[contador], Inicio->etiqueta, cuentaNodos, cant, visited);
                     visited = temp2;
                 }
             }
