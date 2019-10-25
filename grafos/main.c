@@ -16,10 +16,10 @@ void insertarNodo(Nodo** Raiz, char etiqueta, int conexiones);
 void buscarNodo(Nodo *Raiz, int cant, int total, char buscado, Nodo **aux, Nodo* anterior);
 void agregarArista(Nodo *Raiz, int total);
 void buscarDato(Nodo *Raiz, int total);
-void desplegar_grafo(Nodo* Raiz, int cant, int total, Nodo* anterior);
-void liberar_memoria(Nodo** Raiz, int cant, int total);
+void liberar_memoria(Nodo** Raiz, int cant, int total, Nodo* anterior);
 void contarCoincidencias(Nodo **Raiz, int cant, int total);
 void deplegarTabla(Tabla tabla, int cuentaNodos);
+void desplegarGrafo(int cuentaNodos);
 void menu();
 
 // Funcion principal
@@ -62,8 +62,9 @@ int main(){
                 printf("El grafo esta vacio\n");
             break;
         case 4:
+            
             if(Raiz != NULL)
-                desplegar_grafo(Raiz, 0, conexiones, NULL);
+                desplegarGrafo(cuentaNodos);
             else 
                 printf("El grafo esta vacio\n");
             break;
@@ -88,7 +89,7 @@ int main(){
         case 8:
             if(Raiz != NULL){
                 contarCoincidencias(&Raiz, 0, conexiones);
-                liberar_memoria(&Raiz, 0, conexiones);
+                liberar_memoria(&Raiz, 0, conexiones, NULL);
             }
             printf("Saliendo del programa... \n");
             exit(0);
@@ -182,23 +183,6 @@ void buscarNodo(Nodo* Raiz, int cant, int total, char buscado, Nodo** aux, Nodo*
     }
 }
 
-/* * Funcion que despliega los nodos del grafo.
-   * @param Nodo* Raiz recibe la direccion de memoria del nodo raiz del grafo.
-   * @param int cant recibe una variable que contara las veces que se acceda a cada conexion de un nodo.
-   * @param int total recibe el total de conexiones por nodo.
-*/
-void desplegar_grafo(Nodo* Raiz, int cant, int total, Nodo* anterior){
-    while (cant < total){
-            if (Raiz->conexiones[cant] != NULL && Raiz->conexiones[cant] != anterior){
-                desplegar_grafo(Raiz->conexiones[cant], cant, total, Raiz);
-            }
-            if(cant == total - 1){
-                printf("%c, ", Raiz->etiqueta);
-            }
-            cant++;
-    }
-}
-
 /* * Funcion que busca un dato en el grafo.
    * @param Nodo* Raiz recibe la direccion de memoria del nodo raiz del grafo.
    * @param int total recibe el total de conexiones por nodo.
@@ -214,10 +198,12 @@ void buscarDato(Nodo* Raiz, int total){
         printf("No se ha encontrado el dato\n");
         return;
     }
-    printf("%c-> ", aux->etiqueta);
+    printf("El dato %c ha sido encontrado en el grafo\nSus conexiones son: \n", aux->etiqueta);
     for(int i = 0; i < total; i++)
         if(aux->conexiones[i] != NULL)
-            printf("%c-> ", aux->conexiones[i]->etiqueta);
+            printf("\tNodo: %c, Costo: %d\n", aux->conexiones[i]->etiqueta, aux->costo[i]);
+        else  
+            printf("\tNodo: NULL, Costo: NULL\n");
 }
 
 /* * Funcion que agrega una arista al grafo.
@@ -257,11 +243,10 @@ void agregarArista(Nodo* Raiz, int total){
    * @param int cant recibe una variable que contara las veces que se acceda a cada conexion de un nodo.
    * @param int total recibe el total de conexiones por nodo.
 */
-void liberar_memoria(Nodo** Raiz, int cant, int total){
+void liberar_memoria(Nodo** Raiz, int cant, int total, Nodo* anterior){
     while (cant < total){
-            if ((*Raiz)->conexiones[cant] != NULL){
-
-                liberar_memoria(&((*Raiz)->conexiones[cant]), cant, total);
+            if ((*Raiz)->conexiones[cant] != NULL && (*Raiz)->conexiones[cant] != anterior){
+                liberar_memoria(&((*Raiz)->conexiones[cant]), cant, total, *Raiz);
                 
             }
             if(cant == total - 1)
@@ -306,4 +291,11 @@ void deplegarTabla(Tabla tabla, int cuentaNodos){
     printf("\nPREV VERTEX: ");
     for (int i = 0; i < cuentaNodos; i++)
         printf("%c, ", tabla.prevVertex[i]);
+}
+void desplegarGrafo(int cuentaNodos){
+    char lbl = 'a';
+    for(int i = 0; i < cuentaNodos; i++){
+        printf("%c, ", lbl);
+        lbl++;
+    }
 }
