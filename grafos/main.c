@@ -88,7 +88,7 @@ int main(){
             break;
         case 8:
             if(Raiz != NULL){
-                contarCoincidencias(&Raiz, 0, conexiones);
+                // contarCoincidencias(&Raiz, 0, conexiones);
                 liberar_memoria(&Raiz, 0, conexiones, NULL);
             }
             printf("Saliendo del programa... \n");
@@ -251,17 +251,11 @@ void agregarArista(Nodo* Raiz, int total){
    * @param int total recibe el total de conexiones por nodo.
 */
 void liberar_memoria(Nodo** Raiz, int cant, int total, Nodo* anterior){
-    while (cant < total){
-            if ((*Raiz)->conexiones[cant] != NULL && (*Raiz)->conexiones[cant] != anterior){
-                liberar_memoria(&((*Raiz)->conexiones[cant]), cant, total, *Raiz);
-                
-            }
-            if(cant == total - 1)
-                (*Raiz)->coincidencias = (*Raiz)->coincidencias - 1;
-            if((*Raiz)->coincidencias == 0)
-                free(*Raiz);
-            
-            cant++;
+    Nodo* aux = *Raiz;
+    while (*Raiz != NULL){
+        aux = *Raiz;
+        *Raiz = (*Raiz)->next;
+        free(aux);
     }
 }
 
