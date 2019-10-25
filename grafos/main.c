@@ -13,7 +13,7 @@
 
 // Prototipos de las funciones
 void insertarNodo(Nodo** Raiz, char etiqueta, int conexiones, int i);
-void buscarNodo(Nodo *Raiz, int cant, int total, char buscado, Nodo **aux, Nodo* anterior);
+void buscarNodo(Nodo *Raiz, char buscado, Nodo **aux);
 void agregarArista(Nodo *Raiz, int total);
 void buscarDato(Nodo *Raiz, int total);
 void liberar_memoria(Nodo** Raiz, int cant, int total, Nodo* anterior);
@@ -149,7 +149,7 @@ void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones, int i){
         do{
             printf("Ingresar el nodo al que va conectado: ");
             scanf(" %c", &NodoConnect);
-            buscarNodo(*Raiz, 0, conexiones, NodoConnect, &aux, NULL);
+            buscarNodo(*Raiz, NodoConnect, &aux);
             if (aux == NULL)
                 printf("El nodo ingresado no existe en el grafo, asegurese de ingresar uno que realmente exista!\n\n");
         } while (aux == NULL);
@@ -180,16 +180,12 @@ void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones, int i){
    * @param char buscado recibe la etiqueta del nodo a buscar.
    * @param Nodo** aux recibe la direccion de memoria de un apuntador que almacenará el nodo buscado.
 */
-void buscarNodo(Nodo* Raiz, int cant, int total, char buscado, Nodo** aux, Nodo* anterior){
-    if (Raiz->etiqueta != buscado){
-        while (cant < total){
-            if (Raiz->conexiones[cant] != NULL && Raiz->conexiones[cant] != anterior)
-                buscarNodo(Raiz->conexiones[cant], cant, total, buscado, aux, Raiz);
-            cant++;
-        }
-    }else{
-        printf("Nodo encontrado\n");
-        *aux = Raiz;
+void buscarNodo(Nodo* Raiz, char buscado, Nodo** aux){
+    Nodo* temp = Raiz;
+    while (temp != NULL){
+        if(temp != NULL && temp->etiqueta == buscado)
+            *aux = temp;
+        temp = temp->next;
     }
 }
 
@@ -203,7 +199,7 @@ void buscarDato(Nodo* Raiz, int total){
     printf("Ingresar nodo a buscar-> ");
     __fpurge(stdin);
     scanf("%c", &etiqueta);
-    buscarNodo(Raiz, 0, total, etiqueta, &aux, NULL);
+    buscarNodo(Raiz, etiqueta, &aux);
     if(aux == NULL){
         printf("No se ha encontrado el dato\n");
         return;
@@ -226,11 +222,11 @@ void agregarArista(Nodo* Raiz, int total){
     printf("Ingresar el nodo al que desea agregar la arista-> ");
     __fpurge(stdin);
     scanf("%c", &etiqueta1);
-    buscarNodo(Raiz, 0, total, etiqueta1, &agregarArista, NULL);  
+    buscarNodo(Raiz, etiqueta1, &agregarArista);  
     printf("Ingresar el nodo al que se va a conectar el nodo anterior-> ");
     __fpurge(stdin);
     scanf("%c", &etiqueta2);
-    buscarNodo(Raiz, 0, total, etiqueta2, &recibirConexion, NULL);  
+    buscarNodo(Raiz, etiqueta2, &recibirConexion);  
     if(agregarArista == NULL || recibirConexion == NULL){
         printf("Alguno de los nodos ingresados no existe\n");
         return;

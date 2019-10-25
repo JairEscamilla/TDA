@@ -67,9 +67,7 @@ void Dijkstra(Nodo *Inicio, Tabla *tabla, int counter, char previoLabel, int cue
             temp = 1;
             temp <<= bits + posicion;
             visited |= temp;
-            if(visited == temp2){
-                printf("asda\n");
-            }else{
+            if(visited != temp2){
                 printf("Visitados: %u\n", visited);
                 if (counter < tabla->sdf[posicion]){
                     tabla->sdf[posicion] = counter;
