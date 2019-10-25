@@ -12,7 +12,7 @@
 // ESTRUCTURA DEL GRAFO
 
 // Prototipos de las funciones
-void insertarNodo(Nodo** Raiz, char etiqueta, int conexiones);
+void insertarNodo(Nodo** Raiz, char etiqueta, int conexiones, int i);
 void buscarNodo(Nodo *Raiz, int cant, int total, char buscado, Nodo **aux, Nodo* anterior);
 void agregarArista(Nodo *Raiz, int total);
 void buscarDato(Nodo *Raiz, int total);
@@ -42,7 +42,7 @@ int main(){
         scanf("%d", &opcion);
         switch (opcion){
         case 1:
-            insertarNodo(&Raiz, etiqueta, conexiones);
+            insertarNodo(&Raiz, etiqueta, conexiones, i);
             etiqueta++;
             if(i == 0)
                 Inicial = Raiz;
@@ -128,15 +128,16 @@ void menu(){
    * @param char etiqueta recibe un valor que contendrá la etiqueta del nodo a insertar.
    * @param int conexiones recibe la cantidad de conexiones por nodo.
 */
-void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones){
+void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones, int i){
     char NodoConnect;
-    Nodo* aux = NULL;
+    Nodo* aux = NULL,  *temp2;
     Nodo* temp = (Nodo*)malloc(sizeof(Nodo));
     temp->etiqueta = etiqueta;
     temp->cantidadConexiones = 0;
     temp->coincidencias = 0;
     temp->conexiones = (Nodo**)malloc(sizeof(Nodo*) * conexiones);
     temp->costo = (int*)malloc(sizeof(int)*conexiones);
+    temp->next = NULL;
     for(int i = 0; i < conexiones; i++)
         temp->conexiones[i] = NULL; 
     if(*Raiz == NULL)
@@ -156,6 +157,12 @@ void insertarNodo(Nodo **Raiz, char etiqueta, int conexiones){
             aux->conexiones[aux->cantidadConexiones] = temp;
             (aux->cantidadConexiones)++;
             printf("%d\n", aux->cantidadConexiones);
+            if(i != 0){
+                temp2 = *Raiz;
+                while(temp2->next != NULL)
+                    temp2 = temp2->next;
+                temp2->next = temp;
+            }
             printf("Se ha insertado correctamente el nodo al grafo!\n\n");
         }else{
             printf("Ya no hay espacio para mas conexiones\n");

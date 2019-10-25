@@ -13,6 +13,7 @@ typedef struct defNodo{
     int cantidadConexiones, coincidencias;
     int *costo;
     struct defNodo **conexiones;
+    struct defNodo* next;
 } Nodo;
 
 typedef struct defTabla{
