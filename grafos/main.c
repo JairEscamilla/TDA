@@ -78,7 +78,10 @@ int main(){
             bandera = 1;
             break;
         case 6:
-            deplegarTabla(t1, cuentaNodos);
+            if(bandera == 0)
+                printf("La tabla aun no ha sido calculada\n");
+            else 
+                deplegarTabla(t1, cuentaNodos);
             break;
         case 7:
             if(bandera == 1){
