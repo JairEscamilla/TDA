@@ -5,9 +5,11 @@
  * @brief:  Implementacion del algortmo Dijkstra a un grafo.
  */
 
+// INCLUYENDO LAS BIBLIOTECAS A UTILIZAR
 #include<stdio.h>
 #include<stdlib.h>
 
+// DEFINIENDO LA ESTRUCTURA DE CADA NODO DEL GRAFO
 typedef struct defNodo{
     char etiqueta;
     int cantidadConexiones, coincidencias;
@@ -16,6 +18,7 @@ typedef struct defNodo{
     struct defNodo* next;
 } Nodo;
 
+// DEFINIENDO ESTRUCTURA DE LA TABLA DONDE SE GUARDARAN LOS CAMINOS MAS CORTOS
 typedef struct defTabla{
     int *sdf;
     char *vertex;
@@ -55,6 +58,7 @@ void inicializarTabla(Tabla* tabla, int cantidad){
    * @param char previoLabel recibe el label anterior al nodo actual en el grafo.
    * @param int cuentaNodos recibe la cantidad de nodos en el grafo.
    * @param int cant es la cantidad de conexiones que tiene cada nodo.
+   * @param unsigned int visited recibe los nodos que ya han sido visitados en el grafo.
 */
 void Dijkstra(Nodo *Inicio, Tabla *tabla, int counter, char previoLabel, int cuentaNodos, int cant, unsigned int visited){
     int contador = 0;
@@ -92,6 +96,7 @@ int buscarPosicion(char *vertex, char etiqueta, int cuentaNodos){
 }
 
 /* * Funcion que calcula la ruta mas corta basandose en la tabla que se ha calculado anteriormente.
+   * @param Tabla t1 recibe la tabla con los caminos mas cortos.
    * @param int cantidad recibe la cantidad de conexiones que tiene cada nodo dentro del grafo.
 */
 void calcular_ruta(Tabla t1, int cantidad){

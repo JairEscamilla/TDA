@@ -2,14 +2,14 @@
  * @author:  Allan Jair Escamilla Hernández, Raul Gonzalez Portillo y Cesar Mauricio Arellano Velasquez
  * @date:    17/septiembre/2019
  * @file:    grafos.c
- * @brief:  Implementacion de un generador de grafos.
+ * @brief:  Implementacion de un generador de grafos y el algoritmo de Dijkstra.
  * -> Con una estructura de datos en C generar un tipo de datos "nodo" que contenga n conexiones definidas por el usuario.
  * -> Implementar las funciones de : anadir_nodo, anadir_vertice, desplegar_grafo, buscar_dato.
  * -> Cada nodo será etiquetado por su orden de insercion.
  */
-#include"dijkstra.h" // Incluyo las bibliotecas
+#include"dijkstra.h" // Incluimos el archivo que contiene las estructuras y la implementacion del algoritmo de Dijkstra
 
-// ESTRUCTURA DEL GRAFO
+
 
 // Prototipos de las funciones
 void insertarNodo(Nodo** Raiz, char etiqueta, int conexiones, int i);
@@ -17,13 +17,13 @@ void buscarNodo(Nodo *Raiz, char buscado, Nodo **aux);
 void agregarArista(Nodo *Raiz, int total);
 void buscarDato(Nodo *Raiz, int total);
 void liberar_memoria(Nodo** Raiz, int cant, int total, Nodo* anterior);
-void contarCoincidencias(Nodo **Raiz, int cant, int total);
 void deplegarTabla(Tabla tabla, int cuentaNodos);
 void desplegarGrafo(int cuentaNodos);
 void menu();
 
 // Funcion principal
 int main(){
+    // DEFINIENDO VARIABLES
     Nodo* Raiz = NULL, *Inicial;
     int opcion = 2, conexiones, i = 0, cuentaNodos = 0;
     char etiqueta = 'a';
@@ -31,6 +31,7 @@ int main(){
     int cuentaPasos = 0;
     int bandera = 0;
     Tabla t1;
+    // CONTINUACION DE LA EJECUCION DEL PROGRAMA
     do{
         printf("Ingresar la cantidad de conexiones por nodo-> ");
         scanf("%d", &conexiones);
@@ -38,7 +39,7 @@ int main(){
             printf("Los nodos deben tener al menos una conexion\n");
     } while (conexiones < 1);
     do{
-        menu();
+        menu(); // DESPLEGANDO MENU
         scanf("%d", &opcion);
         switch (opcion){
         case 1:
@@ -90,7 +91,6 @@ int main(){
             break;
         case 8:
             if(Raiz != NULL){
-                // contarCoincidencias(&Raiz, 0, conexiones);
                 liberar_memoria(&Raiz, 0, conexiones, NULL);
             }
             printf("Saliendo del programa... \n");
@@ -108,7 +108,7 @@ int main(){
     return 0;
 }
 
-// Desarrollando las funciones
+// DESARROLLANDO LAS FUNCIONES
 
 /* * Funcion que imprime el menu
 */
@@ -259,22 +259,6 @@ void liberar_memoria(Nodo** Raiz, int cant, int total, Nodo* anterior){
     }
 }
 
-/* * Funcion que cuenta las veces en las que se puede llegar a un mismo nodo.
-   * @param Nodo** Raiz recibe la direccion de memoria del nodo raiz del grafo.
-   * @param int cant recibe una variable que contara las veces que se acceda a cada conexion de un nodo.
-   * @param int total recibe el total de conexiones por nodo.
-*/
-void contarCoincidencias(Nodo** Raiz, int cant, int total){
-    while (cant < total){
-        if ((*Raiz)->conexiones[cant] != NULL){
-            contarCoincidencias(&((*Raiz)->conexiones[cant]), cant, total);
-        }
-        if (cant == total - 1){
-            (*Raiz)->coincidencias = (*Raiz)->coincidencias + 1;
-        }
-        cant++;
-    }
-}
 
 /* * Funcion que despliega la tabla de calculada por el algoritmo de Dijkstra.
    * @param Tabla tabla recibe la tabla donde se calcularon los caminos mas cortos.
@@ -293,6 +277,10 @@ void deplegarTabla(Tabla tabla, int cuentaNodos){
     for (int i = 0; i < cuentaNodos; i++)
         printf("%c, ", tabla.prevVertex[i]);
 }
+
+/* * Funcion que despliega las etiquetas de los nodos pertenecientes al grafo.
+   * @param int cuentaNodos recibe la cantidad de nodos en el grafo.
+*/
 void desplegarGrafo(int cuentaNodos){
     char lbl = 'a';
     for(int i = 0; i < cuentaNodos; i++){
