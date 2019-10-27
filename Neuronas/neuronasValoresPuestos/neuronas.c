@@ -126,21 +126,21 @@ void entrenarNeurona(Neurona* neuron, int inputs[4][2], int outputs[]){
     FILE* Arch = fopen("neuronas.dat", "wt");
     int epochs = 10000;
     int counter = 0;
-    double salida;
-    double sum = 0, lr = 0.0001;
+    double salida, error;
+    double sum = 0, lr = 0.01;
     for(int i = 0; i < epochs; i++){
         counter = 0;
         while (counter < 4){
             sum = 0;
             sum = sumatoria(inputs[counter], *neuron);
             //salida = sum >= 0;
+            error = outputs[counter] - sum;
             for(int j = 0; j < 2; j++)
-                neuron->w[counter] = neuron->w[counter] + lr*(sum - outputs[counter])*inputs[counter][j];
-
-            neuron->bias = neuron->bias + lr*(sum - outputs[counter]);
+                neuron->w[counter] += lr*(error)*inputs[counter][j];
+            neuron->bias += lr*error;
             counter++;
         }
-        fprintf(Arch, "%f, %f, %f, %f\n", neuron->w[0], neuron->w[1], neuron->bias, sum - outputs[counter]);
+        fprintf(Arch, "%f, %f, %f, %f\n", neuron->w[0], neuron->w[1], neuron->bias, error);
     }
     fclose(Arch);
 }
