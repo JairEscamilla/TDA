@@ -84,7 +84,7 @@ int main(){
     free(x);
     free(and.w);
     free(or.w);
-    //free(not.w);
+    free(not.w);
 }   
 
 // DESARROLLANDO LAS FUNCIONES
@@ -165,7 +165,5 @@ void entrenarNeuronaNot(Neurona *neuron, int inputs[2], int outputs[2]){
         counter++;
     }
     fclose(Arch);
-    printf("%f, %f\n", neuron->w[0], neuron->bias);
-    system("sleep 15");
 }
 
