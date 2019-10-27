@@ -143,7 +143,7 @@ void entrenarNeurona(Neurona* neuron, int inputs[4][2], int outputs[]){
             neuron->w[k] += lr * error * inputs[counter][k]; 
         }
         neuron->bias += error * lr;
-        fprintf(Arch, "%f, %f, %f, %f\n", neuron->w[0], neuron->w[1], neuron->bias, error);
+        fprintf(Arch, "%f, %f\n", neuron->w[0], error);
         counter++;
     }   
     fclose(Arch);
@@ -161,9 +161,11 @@ void entrenarNeuronaNot(Neurona *neuron, int inputs[2], int outputs[2]){
         error = outputs[counter] - activacion(neuron->w[counter] * inputs[counter] + neuron->bias);
         neuron->w[0] += lr * error * inputs[counter];
         neuron->bias += error * lr;
-        fprintf(Arch, "%f, %f, %f, %f\n", neuron->w[0], neuron->w[1], neuron->bias, error);
+        fprintf(Arch, "%d, %f\n", i, error);
         counter++;
     }
     fclose(Arch);
+    printf("%f, %f\n", neuron->w[0], neuron->bias);
+    system("sleep 15");
 }
 
