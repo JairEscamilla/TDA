@@ -22,13 +22,17 @@ int activacion(double sum);
 void iniciarNeuronas(Neurona* and, Neurona* or, Neurona* not);
 double randfrom(double min, double max);
 void entrenarNeurona(Neurona* neuron, int inputs[4][2], int outputs[]);
+void entrenarNeuronaNot(Neurona *neuron, int inputs[2], int outputs[2]);
 
-// FUNCION PRINCIPAL
+    // FUNCION PRINCIPAL
 int main(){
     Neurona and, or, not; // Declarando las neuronas
     int op;
-    int inputsAnd[4][2] = {{0, 0}, {0, 1}, {1, 0}, {1, 1}}; 
-    int outputsAnd[4] = {0, 0, 0, 1};
+    int inputsAnd[4][2] = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+    int outputsOr[4] = {-1, 1, 1, 1}; 
+    int inputsNot[4] = {-1, 1, 0, 0};
+    int outputsNot[4] = {1, -1, 0, 0};
+    int outputsAnd[4] = {-1, -1, -1, 1};
     int *x = (int*)malloc(sizeof(int)*2);
     // ASIGNANDO MEMORIA A LOS ARREGLOS QUE CONTENDRAN LOS PESOS DE LAS ENTRADAS
     and.w = (double*)malloc(sizeof(double)*2);
@@ -37,6 +41,9 @@ int main(){
     not.w = (double*)malloc(sizeof(double)*2);
     iniciarNeuronas(&and, &or, &not); // Inicializando los valores de las neuronas
     entrenarNeurona(&and, inputsAnd, outputsAnd);
+    entrenarNeurona(&or, inputsAnd, outputsOr);
+    entrenarNeurona(&not, inputsAnd, outputsOr);
+    entrenarNeuronaNot(&not, inputsNot, outputsNot);
     do{
         system("clear");
         printf("1.-and\n2.-or\n3.-not\n4.-salir\nElegir una opcion: ");
@@ -60,7 +67,7 @@ int main(){
             printf("Ingresar entrada: ");
             scanf("%d", &(x[0]));
             x[1] = 0;
-            printf("El resultado es %d\n", activacion(sumatoria(x, not)));
+            printf("El resultado es %d\n", activacion(not.w[0] * x[0] + not.bias));
             break;
         case 4: 
             printf("Saliendo\n");
@@ -77,7 +84,7 @@ int main(){
     free(x);
     free(and.w);
     free(or.w);
-    free(not.w);
+    //free(not.w);
 }   
 
 // DESARROLLANDO LAS FUNCIONES
@@ -102,12 +109,12 @@ void iniciarNeuronas(Neurona* and, Neurona* or, Neurona* not){
     and->w[0] = randfrom(0, 1);
     and->w[1] = randfrom(0, 1);
     and->bias = randfrom(0, 1); 
-    or->w[0] = 1;
-    or->w[1] = 1;
-    or->bias = 0;
-    not->w[0] = -1;
+    or->w[0] = randfrom(0, 1);
+    or->w[1] = randfrom(0, 1);
+    or->bias = randfrom(0, 1);
+    not->w[0] = randfrom(0, 1);
     not->w[1] = 0;
-    not->bias = 0.75;
+    not->bias = randfrom(0, 1);
 }
 
 /* * Funcion de activacion de las neuronas.
@@ -124,23 +131,38 @@ double randfrom(double min, double max) {
 
 void entrenarNeurona(Neurona* neuron, int inputs[4][2], int outputs[]){
     FILE* Arch = fopen("neuronas.dat", "wt");
-    int epochs = 10000;
+    int epochs = 100;
     int counter = 0;
     double salida, error;
-    double sum = 0, lr = 0.01;
+    double sum = 0, lr = 0.2;
     for(int i = 0; i < epochs; i++){
-        counter = 0;
-        while (counter < 4){
-            sum = 0;
-            sum = sumatoria(inputs[counter], *neuron);
-            //salida = sum >= 0;
-            error = outputs[counter] - sum;
-            for(int j = 0; j < 2; j++)
-                neuron->w[counter] += lr*(error)*inputs[counter][j];
-            neuron->bias += lr*error;
-            counter++;
+        if(counter == 4)
+            counter = 0;   
+        error = outputs[counter] - activacion(sumatoria(inputs[counter], *neuron));
+        for(int k = 0; k < 2; k++){
+            neuron->w[k] += lr * error * inputs[counter][k]; 
         }
+        neuron->bias += error * lr;
         fprintf(Arch, "%f, %f, %f, %f\n", neuron->w[0], neuron->w[1], neuron->bias, error);
+        counter++;
+    }   
+    fclose(Arch);
+}
+
+void entrenarNeuronaNot(Neurona *neuron, int inputs[2], int outputs[2]){
+    FILE *Arch = fopen("neuronasNot.dat", "wt");
+    int epochs = 100;
+    int counter = 0;
+    double salida, error;
+    double sum = 0, lr = 0.2;
+    for (int i = 0; i < epochs; i++){
+        if (counter == 2)
+            counter = 0;
+        error = outputs[counter] - activacion(neuron->w[counter] * inputs[counter] + neuron->bias);
+        neuron->w[0] += lr * error * inputs[counter];
+        neuron->bias += error * lr;
+        fprintf(Arch, "%f, %f, %f, %f\n", neuron->w[0], neuron->w[1], neuron->bias, error);
+        counter++;
     }
     fclose(Arch);
 }
