@@ -23,9 +23,11 @@ void iniciarNeuronas(Neurona* and, Neurona* or, Neurona* not);
 double randfrom(double min, double max);
 void entrenarNeurona(Neurona* neuron, double inputs[4][2], double outputs[]);
 void entrenarNeuronaNot(Neurona *neuron, double inputs[2], double outputs[2]);
+void set_gen();
 
     // FUNCION PRINCIPAL
-int main(){
+    int main()
+{
     Neurona and, or, not; // Declarando las neuronas
     int op;
     double inputsAnd[4][2] = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
@@ -71,6 +73,7 @@ int main(){
             break;
         case 4: 
             printf("Saliendo\n");
+            set_gen();
             break;
         default:
             printf("Ingresa una opcion valida!\n");
@@ -163,6 +166,13 @@ void entrenarNeuronaNot(Neurona *neuron, double inputs[2], double outputs[2]){
         neuron->bias += error * lr;
         fprintf(Arch, "%d, %f\n", i, error);
         counter++;
+    }
+    fclose(Arch);
+}
+void set_gen(){
+    FILE* Arch = fopen("Entrenamiento.dat", "wt");
+    for(int i = 0; i < 1000; i++){
+        fprintf(Arch, "%f\n", randfrom(-100, 100));
     }
     fclose(Arch);
 }
