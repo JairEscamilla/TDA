@@ -17,24 +17,24 @@ typedef struct Neuronas{
 }Neurona;
 
 // PROTOTIPOS DE LAS FUNCIONES
-double sumatoria(int x[], Neurona n);
+double sumatoria(double x[], Neurona n);
 int activacion(double sum);
 void iniciarNeuronas(Neurona* and, Neurona* or, Neurona* not);
 double randfrom(double min, double max);
-void entrenarNeurona(Neurona* neuron, int inputs[4][2], int outputs[]);
-void entrenarNeuronaNot(Neurona *neuron, int inputs[2], int outputs[2]);
+void entrenarNeurona(Neurona* neuron, double inputs[4][2], double outputs[]);
+void entrenarNeuronaNot(Neurona *neuron, double inputs[2], double outputs[2]);
 
     // FUNCION PRINCIPAL
 int main(){
     Neurona and, or, not; // Declarando las neuronas
     int op;
-    int inputsAnd[4][2] = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
-    int outputsOr[4] = {-1, 1, 1, 1}; 
-    int inputsNot[4] = {-1, 1, 0, 0};
-    int outputsNot[4] = {1, -1, 0, 0};
-    int outputsAnd[4] = {-1, -1, -1, 1};
-    int *x = (int*)malloc(sizeof(int)*2);
-    // ASIGNANDO MEMORIA A LOS ARREGLOS QUE CONTENDRAN LOS PESOS DE LAS ENTRADAS
+    double inputsAnd[4][2] = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+    double outputsOr[4] = {-1, 1, 1, 1}; 
+    double inputsNot[4] = {-1, 1, 0, 0};
+    double outputsNot[4] = {1, -1, 0, 0};
+    double outputsAnd[4] = {-1, -1, -1, 1};
+    double *x = (double*)malloc(sizeof(double)*2);
+    //double ASIGNANDO MEMORIA A LOS ARREGLOS QUE CONTENDRAN LOS PESOS DE LAS ENTRADAS
     and.w = (double*)malloc(sizeof(double)*2);
     and.error = (double*)malloc(sizeof(double)*2);
     or.w = (double*)malloc(sizeof(double)*2);
@@ -52,20 +52,20 @@ int main(){
         case 1:
             for(int i = 0; i < 2; i++){
                 printf("Ingresar entrada numero %d-> ", i);
-                scanf("%d", &(x[i]));
+                scanf("%le", &(x[i]));
             }
             printf("El resultado es %d\n", activacion(sumatoria(x, and)));
             break;
         case 2:
             for(int i = 0; i < 2; i++){
                 printf("Ingresar entrada numero %d-> ", i);
-                scanf("%d", &(x[i]));
+                scanf("%le", &(x[i]));
             }
             printf("El resultado es %d\n", activacion(sumatoria(x, or)));
             break;
         case 3:
             printf("Ingresar entrada: ");
-            scanf("%d", &(x[0]));
+            scanf("%le", &(x[0]));
             x[1] = 0;
             printf("El resultado es %d\n", activacion(not.w[0] * x[0] + not.bias));
             break;
@@ -93,7 +93,7 @@ int main(){
    * @param int x[] recibe un arreglo de las entradas dadas por el usuario.
    * @param Neurona n recibe la neurona que contiene los pesos y el valor del sesgo para realizar la sumatoria.
 */
-double sumatoria(int x[], Neurona n){
+double sumatoria(double x[], Neurona n){
     double sum = 0;
     for(int i = 0; i < 2; i++)
         sum+= x[i]*n.w[i];
@@ -121,7 +121,7 @@ void iniciarNeuronas(Neurona* and, Neurona* or, Neurona* not){
    * @param double sum recibe el resultado de la sumatoria para determinar la activacion o no de la neurona.
 */
 int activacion(double sum){
-    return sum >= 0.5;
+    return sum >= 0;
 }
 double randfrom(double min, double max) {
     double range = (max - min); 
@@ -129,27 +129,27 @@ double randfrom(double min, double max) {
     return min + (rand() / div);
 }
 
-void entrenarNeurona(Neurona* neuron, int inputs[4][2], int outputs[]){
+void entrenarNeurona(Neurona* neuron, double inputs[4][2], double outputs[]){
     FILE* Arch = fopen("neuronas.dat", "wt");
     int epochs = 100;
     int counter = 0;
     double salida, error;
-    double sum = 0, lr = 0.2;
+    double sum = 0, lr = 0.1;
     for(int i = 0; i < epochs; i++){
         if(counter == 4)
             counter = 0;   
-        error = outputs[counter] - activacion(sumatoria(inputs[counter], *neuron));
+        error = outputs[counter] - sumatoria(inputs[counter], *neuron);
         for(int k = 0; k < 2; k++){
             neuron->w[k] += lr * error * inputs[counter][k]; 
         }
         neuron->bias += error * lr;
-        fprintf(Arch, "%f, %f\n", neuron->w[0], error);
+        fprintf(Arch, "%f %f\n", neuron->w[0], error);
         counter++;
     }   
     fclose(Arch);
 }
 
-void entrenarNeuronaNot(Neurona *neuron, int inputs[2], int outputs[2]){
+void entrenarNeuronaNot(Neurona *neuron, double inputs[2], double outputs[2]){
     FILE *Arch = fopen("neuronasNot.dat", "wt");
     int epochs = 100;
     int counter = 0;
