@@ -25,12 +25,17 @@ void entrenarNeurona(Neurona* neuron, double** training_data);
 void entrenarNeuronaNot(Neurona *neuron, double** training_data);
 double** get_training_data(char* gate, int numberOfPoints);
 double **generarMatriz(int height, int weight);
+void resultados(double x[], Neurona gate);
+void resultados2(double x[], Neurona gate);
 
     // FUNCION PRINCIPAL
 int main(){
     Neurona and, or, not; // Declarando las neuronas
     int op;
     double *x = (double*)malloc(sizeof(double)*2);
+    void (*funciones[2])(double [], Neurona);
+    funciones[0] = resultados;
+    funciones[1] = resultados2;
     //double ASIGNANDO MEMORIA A LOS ARREGLOS QUE CONTENDRAN LOS PESOS DE LAS ENTRADAS
     and.w = (double*)malloc(sizeof(double)*2);
     or.w = (double*)malloc(sizeof(double)*2);
@@ -46,34 +51,16 @@ int main(){
         system("clear");
         printf("1.-and\n2.-or\n3.-not\n4.-salir\nElegir una opcion: ");
         scanf("%d", &op);
-        switch (op){
-        case 1:
-            for(int i = 0; i < 2; i++){
-                printf("Ingresar entrada numero %d-> ", i);
-                scanf("%le", &(x[i]));
-            }
-            printf("El resultado es %d\n", activacion(sumatoria(x, and)));
-            break;
-        case 2:
-            for(int i = 0; i < 2; i++){
-                printf("Ingresar entrada numero %d-> ", i);
-                scanf("%le", &(x[i]));
-            }
-            printf("El resultado es %d\n", activacion(sumatoria(x, or)));
-            break;
-        case 3:
-            printf("Ingresar entrada: ");
-            scanf("%le", &(x[0]));
-            x[1] = 0;
-            printf("El resultado es %d\n", activacion(not.w[0] * x[0] + not.bias));
-            break;
-        case 4: 
-            printf("Saliendo\n");
-            break;
-        default:
-            printf("Ingresa una opcion valida!\n");
-            break;
+        if(op >= 1 && op <= 2){
+            if(op == 1)
+                funciones[0](x, and);
+            else  
+                funciones[0](x, or);
         }
+        if(op == 3)
+            funciones[1](x, not);
+        if(op == 4)
+            printf("Saliendo...\n");
         printf("Presionar enter para continuar...\n");
         __fpurge(stdin);
         getchar();
@@ -96,6 +83,21 @@ double sumatoria(double x[], Neurona n){
     for(int i = 0; i < 2; i++)
         sum+= x[i]*n.w[i];
     return sum + n.bias; 
+}
+
+void resultados(double x[], Neurona gate){
+    for (int i = 0; i < 2; i++){
+        printf("Ingresar entrada numero %d-> ", i);
+        scanf("%le", &(x[i]));
+    }
+    printf("El resultado es %d\n", activacion(sumatoria(x, gate)));
+}
+
+void resultados2(double x[], Neurona gate){
+    printf("Ingresar entrada: ");
+    scanf("%le", &(x[0]));
+    x[1] = 0;
+    printf("El resultado es %d\n", activacion(gate.w[0] * x[0] + gate.bias));
 }
 
 /* * Funcion que inicializa los pesos y sesgos de las neuronas.
