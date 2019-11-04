@@ -9,11 +9,11 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
+#include<string.h>
 // DEFINIENDO LA ESTRUCTURA QUE TENDRA UNA NEURONA
 typedef struct Neuronas{
     double* w;
     double bias;
-    double* error;
 }Neurona;
 
 // PROTOTIPOS DE LAS FUNCIONES
@@ -21,31 +21,27 @@ double sumatoria(double x[], Neurona n);
 int activacion(double sum);
 void iniciarNeuronas(Neurona* and, Neurona* or, Neurona* not);
 double randfrom(double min, double max);
-void entrenarNeurona(Neurona* neuron, double inputs[4][2], double outputs[]);
-void entrenarNeuronaNot(Neurona *neuron, double inputs[2], double outputs[2]);
-void set_gen();
+void entrenarNeurona(Neurona* neuron, double** training_data);
+void entrenarNeuronaNot(Neurona *neuron, double** training_data);
+double** get_training_data(char* gate, int numberOfPoints);
+double **generarMatriz(int height, int weight);
 
     // FUNCION PRINCIPAL
-    int main()
-{
+int main(){
     Neurona and, or, not; // Declarando las neuronas
     int op;
-    double inputsAnd[4][2] = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
-    double outputsOr[4] = {-1, 1, 1, 1}; 
-    double inputsNot[4] = {-1, 1, 0, 0};
-    double outputsNot[4] = {1, -1, 0, 0};
-    double outputsAnd[4] = {-1, -1, -1, 1};
     double *x = (double*)malloc(sizeof(double)*2);
     //double ASIGNANDO MEMORIA A LOS ARREGLOS QUE CONTENDRAN LOS PESOS DE LAS ENTRADAS
     and.w = (double*)malloc(sizeof(double)*2);
-    and.error = (double*)malloc(sizeof(double)*2);
     or.w = (double*)malloc(sizeof(double)*2);
-    not.w = (double*)malloc(sizeof(double)*2);
+    not.w = (double*)malloc(sizeof(double));
     iniciarNeuronas(&and, &or, &not); // Inicializando los valores de las neuronas
-    entrenarNeurona(&and, inputsAnd, outputsAnd);
-    entrenarNeurona(&or, inputsAnd, outputsOr);
-    entrenarNeurona(&not, inputsAnd, outputsOr);
-    entrenarNeuronaNot(&not, inputsNot, outputsNot);
+    double **datasetNot = get_training_data("NOT", 50);
+    double **datasetAND = get_training_data("AND", 50);
+    double **datasetOR = get_training_data("OR", 50);
+    entrenarNeuronaNot(&not, datasetNot);
+    entrenarNeurona(&and, datasetAND);
+    entrenarNeurona(&or, datasetOR);
     do{
         system("clear");
         printf("1.-and\n2.-or\n3.-not\n4.-salir\nElegir una opcion: ");
@@ -73,7 +69,6 @@ void set_gen();
             break;
         case 4: 
             printf("Saliendo\n");
-            set_gen();
             break;
         default:
             printf("Ingresa una opcion valida!\n");
@@ -132,48 +127,116 @@ double randfrom(double min, double max) {
     return min + (rand() / div);
 }
 
-void entrenarNeurona(Neurona* neuron, double inputs[4][2], double outputs[]){
+void entrenarNeurona(Neurona* neuron, double** training_data){
     FILE* Arch = fopen("neuronas.dat", "wt");
-    int epochs = 100;
+    int epochs = 10000;
     int counter = 0;
     double salida, error;
     double sum = 0, lr = 0.1;
     for(int i = 0; i < epochs; i++){
-        if(counter == 4)
+        if(counter == 50)
             counter = 0;   
-        error = outputs[counter] - sumatoria(inputs[counter], *neuron);
+        error = training_data[counter][2] - sumatoria(training_data[counter], *neuron);
         for(int k = 0; k < 2; k++){
-            neuron->w[k] += lr * error * inputs[counter][k]; 
+            neuron->w[k] += lr * error * training_data[counter][k]; 
         }
         neuron->bias += error * lr;
-        fprintf(Arch, "%f %f\n", neuron->w[0], error);
+        fprintf(Arch, "%f %f\n", neuron->w[0], error - neuron->w[0]);
         counter++;
     }   
+    fprintf(Arch, "%f, %f, %f\n", neuron->w[0], neuron->w[1], neuron->bias);
     fclose(Arch);
 }
 
-void entrenarNeuronaNot(Neurona *neuron, double inputs[2], double outputs[2]){
-    FILE *Arch = fopen("neuronasNot.dat", "wt");
-    int epochs = 100;
+void entrenarNeuronaNot(Neurona *neuron, double** training_data){
+    FILE *Arch = fopen("not/peso1.dat", "wt");
+    int epochs = 100000;
     int counter = 0;
     double salida, error;
-    double sum = 0, lr = 0.2;
+    double sum = 0, lr = 0.01;
     for (int i = 0; i < epochs; i++){
-        if (counter == 2)
+        if (counter == 50)
             counter = 0;
-        error = outputs[counter] - activacion(neuron->w[counter] * inputs[counter] + neuron->bias);
-        neuron->w[0] += lr * error * inputs[counter];
+        error = training_data[1][counter] - (neuron->w[0] * training_data[0][counter] + neuron->bias);
+        neuron->w[0] += lr * error * training_data[0][counter];
         neuron->bias += error * lr;
-        fprintf(Arch, "%d, %f\n", i, error);
+        fprintf(Arch, "%f, %f\n", neuron->w[0], error);
         counter++;
     }
+    fprintf(Arch, "Recta: %f, %f\n", neuron->w[0], neuron->bias);
     fclose(Arch);
 }
-void set_gen(){
-    FILE* Arch = fopen("Entrenamiento.dat", "wt");
-    for(int i = 0; i < 1000; i++){
-        fprintf(Arch, "%f\n", randfrom(-100, 100));
+double **get_training_data(char* gate, int numberOfPoints){
+    double dato, dato2, resultado;
+    double **matriz;
+    FILE* file, *file2;
+    if(!strcmp("NOT", gate)){
+        matriz = generarMatriz(numberOfPoints, 2);
+        file = fopen("not/verdadero.dat", "wt");
+        file2 = fopen("not/falso.dat", "wt");
+        for(int i = 0; i < numberOfPoints; i++){
+            dato = randfrom(-3, 3);
+            if(dato <= 0){
+                resultado = 1;
+                fprintf(file, "%f, %f\n", dato, resultado);
+            }else{
+                resultado = -1;
+                fprintf(file2, "%f, %f\n", dato, resultado);
+            }  
+            matriz[0][i] = dato;
+            matriz[1][i] = resultado;
+        }
+        fclose(file);
+        fclose(file2);
     }
-    fclose(Arch);
+    if(!strcmp("AND", gate)){
+        matriz = generarMatriz(3, numberOfPoints);
+        file = fopen("and/verdadero.dat", "wt");
+        file2 = fopen("and/falso.dat", "wt");
+        for(int i = 0; i < numberOfPoints; i++){
+            dato = randfrom(-3, 3);
+            dato2 = randfrom(-3, 3);
+            if(dato > 0 && dato2 > 0){
+                resultado = 1;
+                fprintf(file, "%f, %f, %f\n", dato, dato2, resultado);
+            }else{
+                resultado = -1;
+                fprintf(file2, "%f, %f, %f\n", dato, dato2, resultado);
+            }  
+            matriz[i][0] = dato;
+            matriz[i][1] = dato2;
+            matriz[i][2] = resultado;
+        }
+        fclose(file);
+        fclose(file2);
+    }
+    if(!strcmp("OR", gate)){
+        matriz = generarMatriz(3, numberOfPoints);
+        file = fopen("or/falso.dat", "wt");
+        file2 = fopen("or/verdadero.dat", "wt");
+        for(int i = 0; i < numberOfPoints; i++){
+            dato = randfrom(-3, 3);
+            dato2 = randfrom(-3, 3);
+            if(dato <= 0 && dato2 <= 0){
+                resultado = -1;
+                fprintf(file, "%f, %f, %f\n", dato, dato2, resultado);
+            }else{
+                resultado = 1;
+                fprintf(file2, "%f, %f, %f\n", dato, dato2, resultado);
+            }  
+            matriz[i][0] = dato;
+            matriz[i][1] = dato2;
+            matriz[i][2] = resultado;
+        }
+        fclose(file);
+        fclose(file2);
+    }
+    return matriz;
 }
 
+double** generarMatriz(int height, int weight){
+    double** matriz = (double**)malloc(sizeof(double*) * weight);
+    for(int i = 0; i < weight; i++)
+        matriz[i] = (double*)malloc(sizeof(double) * height);
+    return matriz;
+}
