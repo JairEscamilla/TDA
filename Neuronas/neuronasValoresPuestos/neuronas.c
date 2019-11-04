@@ -34,19 +34,23 @@ int main(){
     int op;
     double *x = (double*)malloc(sizeof(double)*2);
     void (*funciones[2])(double [], Neurona);
+    double** (*data)(char*, int) = get_training_data;
+    void (*train[2])(Neurona*, double**);
+    double **datasetNot = data("NOT", 50);
+    double **datasetAND = data("AND", 50);
+    double **datasetOR = data("OR", 50);
     funciones[0] = resultados;
     funciones[1] = resultados2;
+    train[0] = entrenarNeurona;
+    train[1] = entrenarNeuronaNot;
     //double ASIGNANDO MEMORIA A LOS ARREGLOS QUE CONTENDRAN LOS PESOS DE LAS ENTRADAS
     and.w = (double*)malloc(sizeof(double)*2);
     or.w = (double*)malloc(sizeof(double)*2);
     not.w = (double*)malloc(sizeof(double));
     iniciarNeuronas(&and, &or, &not); // Inicializando los valores de las neuronas
-    double **datasetNot = get_training_data("NOT", 50);
-    double **datasetAND = get_training_data("AND", 50);
-    double **datasetOR = get_training_data("OR", 50);
-    entrenarNeuronaNot(&not, datasetNot);
-    entrenarNeurona(&and, datasetAND);
-    entrenarNeurona(&or, datasetOR);
+    train[1](&not, datasetNot);
+    train[0](&and, datasetAND);
+    train[0](&or, datasetOR);
     do{
         system("clear");
         printf("1.-and\n2.-or\n3.-not\n4.-salir\nElegir una opcion: ");
@@ -54,7 +58,7 @@ int main(){
         if(op >= 1 && op <= 2){
             if(op == 1)
                 funciones[0](x, and);
-            else  
+            else 
                 funciones[0](x, or);
         }
         if(op == 3)
@@ -131,10 +135,10 @@ double randfrom(double min, double max) {
 
 void entrenarNeurona(Neurona* neuron, double** training_data){
     FILE* Arch = fopen("neuronas.dat", "wt");
-    int epochs = 10000;
+    int epochs = 1000;
     int counter = 0;
     double salida, error;
-    double sum = 0, lr = 0.1;
+    double sum = 0, lr = 0.2;
     for(int i = 0; i < epochs; i++){
         if(counter == 50)
             counter = 0;   
