@@ -33,7 +33,8 @@ void imprimirError(double promError, int i, char gate[]);
 int main(){
     Neurona and, or, not; // Declarando las neuronas
     int op;
-    double *x = (double*)malloc(sizeof(double)*2);
+    double *x = (double*)malloc(sizeof(double)*2); // Asigno memoria dinamica para las entradas
+    // Genero apuntadores a funciones
     void (*funciones[2])(double [], Neurona);
     double** (*data)(char*, int) = get_training_data;
     void (*train[2])(Neurona*, double**, char[]);
@@ -44,7 +45,7 @@ int main(){
     funciones[1] = resultados2;
     train[0] = entrenarNeurona;
     train[1] = entrenarNeuronaNot;
-    //double ASIGNANDO MEMORIA A LOS ARREGLOS QUE CONTENDRAN LOS PESOS DE LAS ENTRADAS
+    // ASIGNANDO MEMORIA A LOS ARREGLOS QUE CONTENDRAN LOS PESOS DE LAS ENTRADAS
     and.w = (double*)malloc(sizeof(double)*2);
     or.w = (double*)malloc(sizeof(double)*2);
     not.w = (double*)malloc(sizeof(double));
@@ -52,11 +53,13 @@ int main(){
     train[1](&not, datasetNot, "not");
     train[0](&and, datasetAND, "and");
     train[0](&or, datasetOR, "or");
+    // MOSTRANDO MENU
     do{
         system("clear");
         printf("1.-and\n2.-or\n3.-not\n4.-salir\nElegir una opcion: ");
         scanf("%d", &op);
         if(op >= 1 && op <= 2){
+            // Se llaman las funciones haciendo uso de los apuntadores
             if(op == 1)
                 funciones[0](x, and);
             else 
@@ -80,7 +83,7 @@ int main(){
 // DESARROLLANDO LAS FUNCIONES
         
 /* * Funcion que hace la sumatoria de los pesos y las entradas de la neurona
-   * @param int x[] recibe un arreglo de las entradas dadas por el usuario.
+   * @param double x[] recibe un arreglo de las entradas dadas por el usuario.
    * @param Neurona n recibe la neurona que contiene los pesos y el valor del sesgo para realizar la sumatoria.
 */
 double sumatoria(double x[], Neurona n){
@@ -90,6 +93,10 @@ double sumatoria(double x[], Neurona n){
     return sum + n.bias; 
 }
 
+/* * Funcion que hace la sumatoria de los pesos y las entradas de la neurona para devolverle un resultado al usuario.
+   * @param double x[] recibe un arreglo de las entradas dadas por el usuario.
+   * @param Neurona n recibe la neurona que contiene los pesos y el valor del sesgo para realizar la sumatoria.
+*/
 void resultados(double x[], Neurona gate){
     for (int i = 0; i < 2; i++){
         printf("Ingresar entrada numero %d-> ", i);
@@ -98,6 +105,10 @@ void resultados(double x[], Neurona gate){
     printf("El resultado es %d\n", activacion(sumatoria(x, gate)));
 }
 
+/* * Funcion que hace la sumatoria de los pesos y las entradas de la neurona para devolverle un resultado al usuario (Neurona NOT).
+   * @param double x[] recibe un arreglo de las entradas dadas por el usuario.
+   * @param Neurona n recibe la neurona que contiene los pesos y el valor del sesgo para realizar la sumatoria.
+*/
 void resultados2(double x[], Neurona gate){
     printf("Ingresar entrada: ");
     scanf("%le", &(x[0]));
@@ -128,12 +139,22 @@ void iniciarNeuronas(Neurona* and, Neurona* or, Neurona* not){
 int activacion(double sum){
     return sum >= 0;
 }
+
+/* * Funcion que devuelve un valor aleatorio entre dos numeros dados.
+   * @param double min recibe el valor minimo.
+   * @param double max recibe el valor maximo.
+*/
 double randfrom(double min, double max) {
     double range = (max - min); 
     double div = RAND_MAX / range;
     return min + (rand() / div);
 }
 
+/* * Funcion que obtiene los valores de los pesos para que la neurona funcione adecuadamente.
+   * @param Neurona* n recibe la neurona que contiene los pesos y el valor del sesgo para realizar la sumatoria.
+   * @param double** training_data recibe una matriz de datos de prueba para entrenar a la neurona.
+   * @param char gate[] recibe la compuerta logica que se esta entrenando.
+*/
 void entrenarNeurona(Neurona* neuron, double** training_data, char gate[]){
     char directorio[100];
     strcpy(directorio, gate);
@@ -148,7 +169,7 @@ void entrenarNeurona(Neurona* neuron, double** training_data, char gate[]){
             counter = 0;   
         error = training_data[counter][2] - sumatoria(training_data[counter], *neuron);
         promError+= error;
-        if(i % 100 == 0){
+        if(i % 100 == 0){ // Cada 100 epocas se obtiene el promedio de errores.
             imprimirError(promError, i, gate);
             promError = 0.0;
         }
@@ -158,10 +179,15 @@ void entrenarNeurona(Neurona* neuron, double** training_data, char gate[]){
         neuron->bias += error * lr;
         counter++;
     }   
-    fprintf(Arch, "%f*x + %f * y + %f\n", neuron->w[0], neuron->w[1], neuron->bias);
+    fprintf(Arch, "%f*x + %f * y + %f\n", neuron->w[0], neuron->w[1], neuron->bias); // Se imprimie la ecuacion del plano que separa los valores
     fclose(Arch);
 }
 
+/* * Funcion que obtiene los valores de los pesos para que la neurona funcione adecuadamente (neurona NOT).
+   * @param Neurona* n recibe la neurona que contiene los pesos y el valor del sesgo para realizar la sumatoria.
+   * @param double** training_data recibe una matriz de datos de prueba para entrenar a la neurona.
+   * @param char gate[] recibe la compuerta logica que se esta entrenando.
+*/
 void entrenarNeuronaNot(Neurona *neuron, double** training_data, char gate[]){
     char directorio[100];
     strcpy(directorio, gate);
@@ -176,7 +202,7 @@ void entrenarNeuronaNot(Neurona *neuron, double** training_data, char gate[]){
             counter = 0;
         error = training_data[1][counter] - (neuron->w[0] * training_data[0][counter] + neuron->bias);
         promError+= error;
-        if (i % 100 == 0){
+        if (i % 100 == 0){ // Cada 100 epocas se obtiene el promedio de error
             imprimirError(promError, i, gate);
             promError = 0.0;
         }
@@ -187,6 +213,11 @@ void entrenarNeuronaNot(Neurona *neuron, double** training_data, char gate[]){
     fprintf(Arch, "%f*x + %f\n", neuron->w[0], neuron->bias);
     fclose(Arch);
 }
+
+/* * Funcion que devuelve una matriz de datos de prueba para entrenar las neuronas.
+   * @param char gate[] recibe la compuerta logica que se esta entrenando.
+   * int numberOfPoints recibe la cantidad de puntos que se van a generar.
+*/
 double **get_training_data(char* gate, int numberOfPoints){
     double dato, dato2, resultado;
     double **matriz;
@@ -254,7 +285,10 @@ double **get_training_data(char* gate, int numberOfPoints){
     }
     return matriz;
 }
-
+/* * Funcion que genera una matriz y devuelve su referencia en memoria.
+   * @param int height recibe el alto de la matriz.
+   * @param int weight recibe el ancho de la matriz.
+*/
 double** generarMatriz(int height, int weight){
     double** matriz = (double**)malloc(sizeof(double*) * weight);
     for(int i = 0; i < weight; i++)
@@ -262,6 +296,11 @@ double** generarMatriz(int height, int weight){
     return matriz;
 }
 
+/* * Funcion que imprime en un archivo el error de las neuronas.
+   * @param double promError recibe la suma de los errores.
+   * @param int i recibe la iteracion en la que se encuentra el proceso de entreanamiento de la neurona,
+   * @param char gate[] recibe el nombre de la compuerta que se esta entrenando.
+*/
 void imprimirError(double promError, int i, char gate[]){
     char str[3];
     if(i == 100)
