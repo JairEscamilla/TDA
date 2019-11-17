@@ -21,21 +21,22 @@ double sumatoria(double x[], Neurona n);
 int activacion(double sum);
 void iniciarNeuronas(Neurona* and, Neurona* or, Neurona* not);
 double randfrom(double min, double max);
-void entrenarNeurona(Neurona* neuron, double** training_data);
-void entrenarNeuronaNot(Neurona *neuron, double** training_data);
+void entrenarNeurona(Neurona* neuron, double** training_data, char gate[]);
+void entrenarNeuronaNot(Neurona *neuron, double** training_data, char gate[]);
 double** get_training_data(char* gate, int numberOfPoints);
 double **generarMatriz(int height, int weight);
 void resultados(double x[], Neurona gate);
 void resultados2(double x[], Neurona gate);
+void imprimirError(double promError, int i, char gate[]);
 
-    // FUNCION PRINCIPAL
+// FUNCION PRINCIPAL
 int main(){
     Neurona and, or, not; // Declarando las neuronas
     int op;
     double *x = (double*)malloc(sizeof(double)*2);
     void (*funciones[2])(double [], Neurona);
     double** (*data)(char*, int) = get_training_data;
-    void (*train[2])(Neurona*, double**);
+    void (*train[2])(Neurona*, double**, char[]);
     double **datasetNot = data("NOT", 50);
     double **datasetAND = data("AND", 50);
     double **datasetOR = data("OR", 50);
@@ -48,9 +49,9 @@ int main(){
     or.w = (double*)malloc(sizeof(double)*2);
     not.w = (double*)malloc(sizeof(double));
     iniciarNeuronas(&and, &or, &not); // Inicializando los valores de las neuronas
-    train[1](&not, datasetNot);
-    train[0](&and, datasetAND);
-    train[0](&or, datasetOR);
+    train[1](&not, datasetNot, "not");
+    train[0](&and, datasetAND, "and");
+    train[0](&or, datasetOR, "or");
     do{
         system("clear");
         printf("1.-and\n2.-or\n3.-not\n4.-salir\nElegir una opcion: ");
@@ -133,43 +134,57 @@ double randfrom(double min, double max) {
     return min + (rand() / div);
 }
 
-void entrenarNeurona(Neurona* neuron, double** training_data){
-    FILE* Arch = fopen("neuronas.dat", "wt");
+void entrenarNeurona(Neurona* neuron, double** training_data, char gate[]){
+    char directorio[100];
+    strcpy(directorio, gate);
+    strcat(directorio, "/ecuacionPlano.dat");
+    FILE* Arch = fopen(directorio, "wt");
     int epochs = 1000;
     int counter = 0;
-    double salida, error;
+    double salida, error, promError = 0.0;
     double sum = 0, lr = 0.2;
     for(int i = 0; i < epochs; i++){
         if(counter == 50)
             counter = 0;   
         error = training_data[counter][2] - sumatoria(training_data[counter], *neuron);
+        promError+= error;
+        if(i % 100 == 0){
+            imprimirError(promError, i, gate);
+            promError = 0.0;
+        }
         for(int k = 0; k < 2; k++){
             neuron->w[k] += lr * error * training_data[counter][k]; 
         }
         neuron->bias += error * lr;
-        fprintf(Arch, "%f %f\n", neuron->w[0], error - neuron->w[0]);
         counter++;
     }   
-    fprintf(Arch, "%f, %f, %f\n", neuron->w[0], neuron->w[1], neuron->bias);
+    fprintf(Arch, "%f*x + %f * y + %f\n", neuron->w[0], neuron->w[1], neuron->bias);
     fclose(Arch);
 }
 
-void entrenarNeuronaNot(Neurona *neuron, double** training_data){
-    FILE *Arch = fopen("not/peso1.dat", "wt");
-    int epochs = 100000;
+void entrenarNeuronaNot(Neurona *neuron, double** training_data, char gate[]){
+    char directorio[100];
+    strcpy(directorio, gate);
+    strcat(directorio, "/ecuacionPlano.dat");
+    FILE *Arch = fopen(directorio, "wt");
+    int epochs = 1000;
     int counter = 0;
-    double salida, error;
+    double salida, error, promError = 0.0;
     double sum = 0, lr = 0.01;
     for (int i = 0; i < epochs; i++){
         if (counter == 50)
             counter = 0;
         error = training_data[1][counter] - (neuron->w[0] * training_data[0][counter] + neuron->bias);
+        promError+= error;
+        if (i % 100 == 0){
+            imprimirError(promError, i, gate);
+            promError = 0.0;
+        }
         neuron->w[0] += lr * error * training_data[0][counter];
         neuron->bias += error * lr;
-        fprintf(Arch, "%f, %f\n", neuron->w[0], error);
         counter++;
     }
-    fprintf(Arch, "Recta: %f, %f\n", neuron->w[0], neuron->bias);
+    fprintf(Arch, "%f*x + %f\n", neuron->w[0], neuron->bias);
     fclose(Arch);
 }
 double **get_training_data(char* gate, int numberOfPoints){
@@ -181,7 +196,7 @@ double **get_training_data(char* gate, int numberOfPoints){
         file = fopen("not/verdadero.dat", "wt");
         file2 = fopen("not/falso.dat", "wt");
         for(int i = 0; i < numberOfPoints; i++){
-            dato = randfrom(-3, 3);
+            dato = randfrom(-1, 1);
             if(dato <= 0){
                 resultado = 1;
                 fprintf(file, "%f, %f\n", dato, resultado);
@@ -200,8 +215,8 @@ double **get_training_data(char* gate, int numberOfPoints){
         file = fopen("and/verdadero.dat", "wt");
         file2 = fopen("and/falso.dat", "wt");
         for(int i = 0; i < numberOfPoints; i++){
-            dato = randfrom(-3, 3);
-            dato2 = randfrom(-3, 3);
+            dato = randfrom(-1, 1);
+            dato2 = randfrom(-1, 1);
             if(dato > 0 && dato2 > 0){
                 resultado = 1;
                 fprintf(file, "%f, %f, %f\n", dato, dato2, resultado);
@@ -221,8 +236,8 @@ double **get_training_data(char* gate, int numberOfPoints){
         file = fopen("or/falso.dat", "wt");
         file2 = fopen("or/verdadero.dat", "wt");
         for(int i = 0; i < numberOfPoints; i++){
-            dato = randfrom(-3, 3);
-            dato2 = randfrom(-3, 3);
+            dato = randfrom(-1, 1);
+            dato2 = randfrom(-1, 1);
             if(dato <= 0 && dato2 <= 0){
                 resultado = -1;
                 fprintf(file, "%f, %f, %f\n", dato, dato2, resultado);
@@ -245,4 +260,18 @@ double** generarMatriz(int height, int weight){
     for(int i = 0; i < weight; i++)
         matriz[i] = (double*)malloc(sizeof(double) * height);
     return matriz;
+}
+
+void imprimirError(double promError, int i, char gate[]){
+    char str[3];
+    if(i == 100)
+        strcpy(str, "wt");
+    else 
+        strcpy(str, "at");
+    char newString[100];
+    strcpy(newString, gate);
+    strcat(newString, "/errores.dat");
+    FILE* Arch = fopen(newString, str);
+    fprintf(Arch, "%d, %f\n", i, promError / 100);
+    fclose(Arch);
 }
