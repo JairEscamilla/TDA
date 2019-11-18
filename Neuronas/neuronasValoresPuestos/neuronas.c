@@ -28,6 +28,7 @@ double **generarMatriz(int height, int weight);
 void resultados(double x[], Neurona gate);
 void resultados2(double x[], Neurona gate);
 void imprimirError(double promError, int i, char gate[]);
+void liberarMemoria(double **Matriz, int Ancho, int Alto);
 
 // FUNCION PRINCIPAL
 int main(){
@@ -78,6 +79,9 @@ int main(){
     free(and.w);
     free(or.w);
     free(not.w);
+    liberarMemoria(datasetNot, 50, 2);
+    liberarMemoria(datasetAND, 50, 3);
+    liberarMemoria(datasetOR, 50, 3);
 }   
 
 // DESARROLLANDO LAS FUNCIONES
@@ -313,4 +317,15 @@ void imprimirError(double promError, int i, char gate[]){
     FILE* Arch = fopen(newString, str);
     fprintf(Arch, "%d, %f\n", i, promError / 100);
     fclose(Arch);
+}
+
+/* * Funcion que libera memoria de las matrices generadas.
+   * @param double** Matriz recibe la referencia en memoria de la matriz a liberar.
+   * @param int Ancho recibe el ancho de la matriz.
+   * @param int Alto recibe el alto de la matriz.
+*/
+void liberarMemoria(double **Matriz, int Ancho, int Alto){
+    for (int i = 0; i < Alto; i++)
+        free(Matriz[i]); // Filas
+    free(Matriz);        // Columnas
 }
